@@ -42,10 +42,7 @@ export default function App() {
         </div>
 
         <div className="face-container">
-          <img
-            src="/images/mặt.svg"
-            alt="mặt"
-          />
+          <img src={`${import.meta.env.BASE_URL}images/mặt.svg`} alt="mặt" />
 
           <span
             className="eye-scroll-indicator eye-scroll-indicator-left"
