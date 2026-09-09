@@ -1,0 +1,434 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Dawning+of+a+New+Day&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #FDFCFF;
+  color: #809327;
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.landing-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #FDFCFF;
+}
+
+/* =========================
+   Background blobs
+   ========================= */
+
+.blob {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+}
+
+.blob-highlight {
+  width: 360px;
+  height: 360px;
+  right: -176px;
+  top: -192px;
+  background: #FFEF19;
+  opacity: 0.30;
+  filter: blur(110px);
+}
+
+.blob-supporting {
+  width: 320px;
+  height: 320px;
+  left: -176px;
+  top: -128px;
+  background: #6CE9C4;
+  opacity: 0.30;
+  filter: blur(100px);
+}
+
+.blob-mint {
+  width: 360px;
+  height: 360px;
+  right: -176px;
+  bottom: -192px;
+  background: #94FEDE;
+  opacity: 0.35;
+  filter: blur(110px);
+}
+
+.blob-element {
+  width: 300px;
+  height: 300px;
+  left: -144px;
+  bottom: -160px;
+  background: #FF828F;
+  opacity: 0.25;
+  filter: blur(100px);
+}
+
+/* =========================
+   Main hero
+   ========================= */
+
+.hero {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+  max-width: 1280px;
+  min-height: 100vh;
+
+  margin: 0 auto;
+  padding: 64px 16px 0;
+
+  gap: 0;
+}
+
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  max-width: 1120px;
+
+  gap: 4px;
+
+  text-align: center;
+}
+
+.greeting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.greeting p {
+  max-width: 556px;
+  margin: 0;
+
+  font-family: "Dawning of a New Day", cursive;
+  font-size: 30px;
+  line-height: 1.25;
+
+  color: #809327;
+}
+
+/* =========================
+   Title
+   ========================= */
+
+.title-lockup {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.title-lockup h1 {
+  margin: 0;
+
+  font-family: "Space Grotesk", -apple-system, Roboto, sans-serif;
+  font-size: 15vw;
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: 0.02em;
+
+  color: #CE0018;
+
+  white-space: nowrap;
+}
+
+.title-lockup p {
+  width: 100%;
+  margin: 0;
+
+  padding-right: 0.6vw;
+
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.05px;
+
+  text-align: right;
+
+  color: #809327;
+}
+
+/* =========================
+   Face
+   ========================= */
+
+.face-container {
+  position: relative;
+
+  width: 100%;
+  max-width: 280px;
+}
+
+.face-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* =========================
+   Scroll indicators
+   ========================= */
+
+.eye-scroll-indicator {
+  position: absolute;
+  z-index: 1;
+
+  color: #6CE9C4;
+
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1;
+
+  animation: eye-scroll-flicker 1s steps(1, end) infinite;
+}
+
+.eye-scroll-indicator-left {
+  top: 407.6px;
+  left: 227.7px;
+}
+
+.eye-scroll-indicator-right {
+  top: 407.6px;
+  left: 398.2px;
+}
+
+@keyframes eye-scroll-flicker {
+  0%,
+  49.99% {
+    color: #6CE9C4;
+  }
+
+  50%,
+  100% {
+    color: #FFEF19;
+  }
+}
+
+/* =========================
+   Help mark
+   ========================= */
+
+.help-control {
+  position: fixed;
+
+  left: 48px;
+  bottom: 56px;
+
+  z-index: 2;
+
+  display: grid;
+
+  width: 21px;
+  height: 21px;
+
+  padding: 0;
+  border: 0;
+
+  color: #809327;
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.help-control svg {
+  width: 21px;
+  height: 21px;
+}
+
+/* =========================
+   Language switch
+   ========================= */
+
+.language-switch {
+  position: fixed;
+
+  right: 48px;
+  bottom: 56px;
+
+  z-index: 2;
+}
+
+.language-toggle {
+  display: grid;
+
+  width: 85px;
+  height: 36px;
+
+  grid-template-columns: 1fr 1fr;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(128, 147, 39, 0.32);
+  border-radius: 8px;
+}
+
+.language-option {
+  padding: 8px 12px;
+
+  border: 0;
+
+  color: #000;
+  background: transparent;
+
+  font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+}
+
+.language-option-active {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (min-width: 640px) {
+  .hero {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .greeting p {
+    font-size: 36px;
+  }
+
+  .face-container {
+    max-width: 380px;
+  }
+
+  .blob-highlight {
+    width: 480px;
+    height: 480px;
+    filter: blur(140px);
+  }
+
+  .blob-supporting {
+    width: 440px;
+    height: 440px;
+    filter: blur(130px);
+  }
+
+  .blob-mint {
+    width: 480px;
+    height: 480px;
+    filter: blur(140px);
+  }
+
+  .blob-element {
+    width: 400px;
+    height: 400px;
+    filter: blur(140px);
+  }
+}
+
+@media (max-width: 640px) {
+  .language-switch {
+    right: 24px;
+    bottom: 24px;
+  }
+}
+
+@media (min-width: 768px) {
+  .title-lockup h1 {
+    font-size: 104px;
+    line-height: 0.86;
+  }
+
+  .face-container {
+    max-width: 500px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-top: 64px;
+  }
+
+  .title-lockup h1 {
+    font-size: 116px;
+    line-height: 1;
+  }
+
+  .face-container {
+    max-width: 702px;
+  }
+
+  .blob-highlight {
+    width: 560px;
+    height: 560px;
+    right: -128px;
+    top: -192px;
+    filter: blur(170px);
+  }
+
+  .blob-supporting {
+    width: 520px;
+    height: 520px;
+    left: -128px;
+    top: -128px;
+    filter: blur(160px);
+  }
+
+  .blob-mint {
+    width: 560px;
+    height: 560px;
+    right: -176px;
+    bottom: -192px;
+    filter: blur(170px);
+  }
+
+  .blob-element {
+    width: 500px;
+    height: 500px;
+    left: -144px;
+    bottom: -160px;
+    filter: blur(170px);
+  }
+
+  .eye-scroll-indicator {
+    top: 82%;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .eye-scroll-indicator-left {
+    top: 75%;
+    left: 34%;
+  }
+
+  .eye-scroll-indicator-right {
+    top: 75%;
+    left: 59%;
+  }
+}
