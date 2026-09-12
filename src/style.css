@@ -27,14 +27,13 @@ button {
 
 .landing-page {
   position: relative;
+  width: 100%;
   min-height: 100vh;
   overflow: hidden;
   background: #FDFCFF;
 }
 
-/* =========================
-   Background blobs
-   ========================= */
+/* ---------- Blobs ---------- */
 
 .blob {
   position: absolute;
@@ -82,9 +81,7 @@ button {
   filter: blur(100px);
 }
 
-/* =========================
-   Main hero
-   ========================= */
+/* ---------- Hero ---------- */
 
 .hero {
   position: relative;
@@ -135,10 +132,6 @@ button {
   color: #809327;
 }
 
-/* =========================
-   Title
-   ========================= */
-
 .title-lockup {
   width: fit-content;
   max-width: 100%;
@@ -161,7 +154,6 @@ button {
 .title-lockup p {
   width: 100%;
   margin: 0;
-
   padding-right: 0.6vw;
 
   font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
@@ -175,30 +167,44 @@ button {
   color: #809327;
 }
 
-/* =========================
-   Face
-   ========================= */
+/* =========================================================
+   FACE
+   SVG native size = 702 × 502
+   ========================================================= */
 
 .face-container {
-  position: relative;
+  position: absolute;
+  z-index: 5;
 
-  width: 100%;
-  max-width: 280px;
+  left: 50%;
+  bottom: 0;
+
+  width: min(702px, 48.75vw, 97.5dvh);
+  height: auto;
+
+  transform: translateX(-50%);
+
+  pointer-events: none;
 }
 
 .face-container img {
+  position: relative;
+  z-index: 1;
+
   display: block;
+
   width: 100%;
   height: auto;
 }
 
-/* =========================
-   Scroll indicators
-   ========================= */
+/* =========================================================
+   SCROLL / DOWN
+   Coordinates are relative to the 702 × 502 artwork
+   ========================================================= */
 
 .eye-scroll-indicator {
   position: absolute;
-  z-index: 1;
+  z-index: 10;
 
   color: #6CE9C4;
 
@@ -208,17 +214,19 @@ button {
   font-weight: 700;
   line-height: 1;
 
+  pointer-events: none;
+
   animation: eye-scroll-flicker 1s steps(1, end) infinite;
 }
 
 .eye-scroll-indicator-left {
-  top: 407.6px;
-  left: 227.7px;
+  top: 81.2%;
+  left: 32.44%;
 }
 
 .eye-scroll-indicator-right {
-  top: 407.6px;
-  left: 398.2px;
+  top: 81.2%;
+  left: 56.72%;
 }
 
 @keyframes eye-scroll-flicker {
@@ -233,16 +241,14 @@ button {
   }
 }
 
-/* =========================
-   Help mark
-   ========================= */
+/* =========================================================
+   HELP
+   ========================================================= */
 
 .help-control {
   position: absolute;
-
   left: 48px;
   bottom: 56px;
-
   z-index: 2;
 
   display: grid;
@@ -251,6 +257,7 @@ button {
   height: 21px;
 
   padding: 0;
+
   border: 0;
 
   color: #809327;
@@ -264,16 +271,14 @@ button {
   height: 21px;
 }
 
-/* =========================
-   Language switch
-   ========================= */
+/* =========================================================
+   LANDING LANGUAGE
+   ========================================================= */
 
 .language-switch {
   position: absolute;
-
   right: 48px;
   bottom: 56px;
-
   z-index: 2;
 }
 
@@ -313,9 +318,9 @@ button {
   background: rgba(0, 0, 0, 0.05);
 }
 
-/* =========================
-   Responsive
-   ========================= */
+/* =========================================================
+   LANDING RESPONSIVE
+   ========================================================= */
 
 @media (min-width: 640px) {
   .hero {
@@ -325,10 +330,6 @@ button {
 
   .greeting p {
     font-size: 36px;
-  }
-
-  .face-container {
-    max-width: 380px;
   }
 
   .blob-highlight {
@@ -356,21 +357,10 @@ button {
   }
 }
 
-@media (max-width: 640px) {
-  .language-switch {
-    right: 24px;
-    bottom: 24px;
-  }
-}
-
 @media (min-width: 768px) {
   .title-lockup h1 {
     font-size: 104px;
     line-height: 0.86;
-  }
-
-  .face-container {
-    max-width: 500px;
   }
 }
 
@@ -382,10 +372,6 @@ button {
   .title-lockup h1 {
     font-size: 116px;
     line-height: 1;
-  }
-
-  .face-container {
-    max-width: 702px;
   }
 
   .blob-highlight {
@@ -419,27 +405,18 @@ button {
     bottom: -160px;
     filter: blur(170px);
   }
-
-  .eye-scroll-indicator {
-    top: 82%;
-  }
 }
 
-@media (min-width: 640px) and (max-width: 1023px) {
-  .eye-scroll-indicator-left {
-    top: 75%;
-    left: 34%;
-  }
-
-  .eye-scroll-indicator-right {
-    top: 75%;
-    left: 59%;
+@media (max-width: 640px) {
+  .language-switch {
+    right: 24px;
+    bottom: 24px;
   }
 }
 
 
 /* =========================================================
-   BOOK OF HISTORY — PAGE
+   PAGE 2 — BOOK OF HISTORY
    ========================================================= */
 
 .book-of-history-page {
@@ -454,9 +431,7 @@ button {
   color: #000;
 }
 
-/* =========================
-   Background atmosphere
-   ========================= */
+/* ---------- Book blobs ---------- */
 
 .book-blob {
   position: absolute;
@@ -501,9 +476,7 @@ button {
   opacity: 0.13;
 }
 
-/* =========================
-   Header
-   ========================= */
+/* ---------- Header ---------- */
 
 .book-header {
   position: absolute;
@@ -526,10 +499,10 @@ button {
   gap: 16px;
 
   padding: 0;
+
   border: 0;
 
   background: transparent;
-
   color: #3f4998;
 
   font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
@@ -553,9 +526,7 @@ button {
   line-height: 1;
 }
 
-/* =========================
-   Language
-   ========================= */
+/* ---------- Language ---------- */
 
 .book-language {
   display: flex;
@@ -593,9 +564,7 @@ button {
   background: rgba(0, 0, 0, 0.04);
 }
 
-/* =========================
-   Main content
-   ========================= */
+/* ---------- Main ---------- */
 
 .book-main {
   position: absolute;
@@ -611,9 +580,7 @@ button {
   width: max-content;
 }
 
-/* =========================
-   Face
-   ========================= */
+/* ---------- Face frame ---------- */
 
 .book-face-frame {
   position: relative;
@@ -644,18 +611,14 @@ button {
   transform: translate(-7%, -49.5%);
 }
 
-/* =========================
-   Quote
-   ========================= */
+/* ---------- Quote ---------- */
 
 .book-quote {
   margin: 0;
 
   font-family: Inter, -apple-system, Roboto, Helvetica, sans-serif;
-
   font-size: 48px;
   font-weight: 800;
-
   line-height: 1.23;
   letter-spacing: -1.8px;
 
@@ -666,9 +629,7 @@ button {
   color: #ce0018;
 }
 
-/* =========================
-   Footer
-   ========================= */
+/* ---------- Footer ---------- */
 
 .book-footer {
   position: absolute;
@@ -706,9 +667,7 @@ button {
   line-height: 18px;
 }
 
-/* =========================
-   Page responsive
-   ========================= */
+/* ---------- Page responsive ---------- */
 
 @media (max-width: 1100px) {
   .book-main {
@@ -773,9 +732,8 @@ button {
   }
 }
 
-
 /* =========================================================
-   BOOK OF HISTORY — SIDEBAR
+   SIDEBAR
    ========================================================= */
 
 .book-sidebar-overlay {
@@ -786,27 +744,32 @@ button {
   z-index: 20;
 
   display: flex;
+
+  pointer-events: none;
 }
 
-/* =========================
-   Backdrop
-   ========================= */
+.book-sidebar-overlay .book-sidebar {
+  pointer-events: auto;
+}
 
 .book-sidebar-backdrop {
   position: absolute;
 
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 288px;
+
+  width: auto;
 
   border: 0;
 
   background: rgba(58, 47, 71, 0.2);
 
   cursor: pointer;
-}
 
-/* =========================
-   Sidebar container
-   ========================= */
+  pointer-events: auto;
+}
 
 .book-sidebar {
   position: relative;
@@ -820,7 +783,7 @@ button {
   gap: 24px;
 
   width: 288px;
-  max-width: 86vw;
+  max-width: 288px;
   height: 100vh;
 
   overflow-y: auto;
@@ -829,16 +792,13 @@ button {
 
   border-right: 1px solid rgba(255, 255, 255, 0.2);
 
-  background: rgba(243, 238, 255, 0.48);
+  background: #F3EEFF;
 
   box-shadow:
     inset 0 1px 4px rgba(255, 255, 255, 0.2),
     0 8px 24px rgba(0, 0, 0, 0.12);
 
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-
-  animation: book-sidebar-in 0.35s ease-out;
+  animation: book-sidebar-in 0.22s ease-out;
 }
 
 @keyframes book-sidebar-in {
@@ -851,9 +811,7 @@ button {
   }
 }
 
-/* =========================
-   Sidebar sections
-   ========================= */
+/* ---------- Sidebar sections ---------- */
 
 .book-sidebar-section {
   display: flex;
@@ -879,17 +837,11 @@ button {
   color: rgba(58, 47, 71, 0.8);
 
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-
   font-size: 13px;
   font-weight: 500;
-
   line-height: 20px;
   letter-spacing: 0.065px;
 }
-
-/* =========================
-   Navigation buttons
-   ========================= */
 
 .book-sidebar-nav-row {
   display: flex;
@@ -912,10 +864,8 @@ button {
   color: #000;
 
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-
   font-size: 15px;
   font-weight: 400;
-
   line-height: 24px;
 
   text-align: left;
@@ -923,19 +873,11 @@ button {
   cursor: pointer;
 }
 
-/* =========================
-   Active button
-   ========================= */
-
 .book-sidebar-nav-row.active {
   background: #FDFCFF;
 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
-
-/* =========================
-   Main navigation icon
-   ========================= */
 
 .book-sidebar-nav-icon {
   display: flex;
@@ -956,41 +898,38 @@ button {
   height: 20px;
 }
 
-/* =========================
-   Navigation text
-   ========================= */
-
 .book-sidebar-nav-label {
   flex: 1;
 }
 
-/* =========================
-   Info icon
-   ========================= */
-
 .book-sidebar-info {
   display: flex;
+
   width: 28px;
   height: 28px;
+
   flex: 0 0 28px;
+
   align-items: center;
   justify-content: flex-end;
+
   padding: 2px;
+
   box-sizing: border-box;
+
   overflow: hidden;
+
   opacity: 0.5;
 }
 
 .book-sidebar-info svg {
   display: block;
+
   width: 24px;
   height: 24px;
+
   flex: 0 0 24px;
 }
-
-/* =========================
-   Sidebar logo
-   ========================= */
 
 .book-sidebar-logo {
   display: flex;
@@ -1014,85 +953,53 @@ button {
   object-fit: contain;
 }
 
-/* =========================
-   Sidebar responsive
-   ========================= */
+/* ---------- Sidebar hover ---------- */
 
-@media (max-width: 600px) {
-  .book-sidebar {
-    width: 100%;
-    max-width: 100%;
-
-    padding-left: 32px;
-    padding-right: 32px;
-  }
-}
-/* =========================
-   FACE SCROLL TRANSITION
-   ========================= */
-
-.face-transition {
-  position: fixed;
-  z-index: 10;
-  pointer-events: none;
-  overflow: hidden;
-  visibility: hidden;
-  will-change: left, top, width, height;
-}
-
-.face-transition img {
-  position: absolute;
-  display: block;
-  max-width: none;
-  object-fit: contain;
-}
-
-/* =========================
-   BOOK SIDEBAR INTERACTIONS
-   ========================= */
-
-/* Hover option */
 .book-sidebar-nav-row:not(.active):hover {
   background: #D6D0DE;
 }
 
+/* ---------- Tooltip ---------- */
 
-/* Info tooltip */
 .book-info-tooltip {
   position: fixed;
+
   z-index: 100;
+
   pointer-events: none;
 
-  padding: 8px 10px;
+  padding: 6px 8px;
+
   border-radius: 6px;
 
-  background: #FFFFFF;
-  color: #000000;
+  background: #FFF;
+  color: #000;
 
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 12px;
   font-weight: 400;
-  line-height: 20px;
+  line-height: 18px;
 
   white-space: nowrap;
 
   transform: translate(-50%, -100%);
 }
 
+/* ---------- Coming soon ---------- */
 
-/* Coming soon overlay */
 .coming-soon-overlay {
   position: fixed;
+
   inset: 0;
+
   z-index: 50;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 }
 
-
-/* Coming soon popup */
 .coming-soon-popup {
   box-sizing: border-box;
 
@@ -1101,8 +1008,8 @@ button {
   border: 1px solid #D9D9D9;
   border-radius: 8px;
 
-  background: #FFFFFF;
-  color: #000000;
+  background: #FFF;
+  color: #000;
 
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 20px;
@@ -1111,61 +1018,39 @@ button {
 }
 
 /* =========================================================
-   FINAL RESPONSIVE + SIDEBAR PUSH FIXES
+   FACE TRANSITION
    ========================================================= */
 
-/* -------------------------
-   Landing page: fit screen
-   ------------------------- */
-
-.landing-page {
-  height: 100dvh;
-  min-height: 100dvh;
-}
-
-.hero {
-  height: 100%;
-  min-height: 0;
-  padding-top: clamp(40px, 8vh, 64px);
-}
-
-.face-container {
-  max-height: calc(100dvh - 300px);
-  width: min(702px, 70vw, 46dvh);
-}
-
-.face-container img {
-  width: 100%;
-  height: auto;
-}
-
-.eye-scroll-indicator {
-  z-index: 5;
+.face-transition {
+  position: fixed;
+  z-index: 4;
   pointer-events: none;
+  overflow: hidden;
+  visibility: hidden;
+  will-change: left, top, width, height;
 }
 
-.eye-scroll-indicator-left {
-  top: 82%;
-  left: 32.4%;
+.face-transition img {
+  position: absolute;
+
+  display: block;
+
+  max-width: none;
+
+  object-fit: contain;
 }
 
-.eye-scroll-indicator-right {
-  top: 82%;
-  left: 56.7%;
-}
-
-
-/* -------------------------
-   Page 2: sidebar pushes page
-   ------------------------- */
+/* =========================================================
+   SIDEBAR PUSH
+   ========================================================= */
 
 .book-of-history-page {
   width: 100%;
   margin-left: 0;
 
   transition:
-    width 0.25s ease,
-    margin-left 0.25s ease;
+    width 0.22s ease,
+    margin-left 0.22s ease;
 }
 
 .book-of-history-page.sidebar-open {
@@ -1173,67 +1058,9 @@ button {
   margin-left: 288px;
 }
 
-
-/* Hide "Book of history >>" while menu is open */
-
-.book-of-history-page.sidebar-open .book-menu-button {
-  visibility: hidden;
-}
-
-
-/* -------------------------
-   Sidebar
-   ------------------------- */
-
-.book-sidebar {
-  width: 288px;
-  max-width: 288px;
-
-  background: #F3EEFF;
-
-  opacity: 1;
-
-  animation-duration: 0.22s;
-}
-
-
-/* Backdrop only covers the area beside sidebar */
-
-.book-sidebar-backdrop {
-  left: 288px;
-  width: calc(100vw - 288px);
-
-  background: rgba(58, 47, 71, 0.2);
-}
-
-
-/* Keep sidebar text at 16px */
-
-.book-sidebar-nav-row {
-  font-size: 16px;
-  line-height: 24px;
-}
-
-
-/* Hover */
-
-.book-sidebar-nav-row:not(.active):hover {
-  background: #D6D0DE;
-}
-
-
-/* -------------------------
-   Page 2 language toggle
-   ------------------------- */
-
-.book-language button.active {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-
-/* -------------------------
-   Mobile
-   ------------------------- */
+/* =========================================================
+   MOBILE SIDEBAR
+   ========================================================= */
 
 @media (max-width: 600px) {
   .book-of-history-page.sidebar-open {
@@ -1244,6 +1071,9 @@ button {
   .book-sidebar {
     width: 100%;
     max-width: 100%;
+
+    padding-left: 32px;
+    padding-right: 32px;
   }
 
   .book-sidebar-backdrop {

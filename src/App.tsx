@@ -6,8 +6,8 @@ export default function App() {
   return (
     <>
       <LandingPage />
-      <BookofHistory1 />
       <FaceTransition />
+      <BookofHistory1 />
     </>
   );
 }

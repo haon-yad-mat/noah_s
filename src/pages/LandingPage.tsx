@@ -37,11 +37,7 @@ export default function LandingPage() {
         </div>
       </main>
 
-      <button
-        className="help-control"
-        type="button"
-        aria-label="Help"
-      >
+      <button className="help-control" type="button" aria-label="Help">
         <svg viewBox="0 0 21 21" fill="none" aria-hidden="true">
           <circle
             cx="10.5"
