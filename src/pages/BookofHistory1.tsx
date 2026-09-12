@@ -176,6 +176,7 @@ export default function BookofHistory1() {
   } | null>(null);
 
   const [comingSoonOpen, setComingSoonOpen] = useState(false);
+  const [language, setLanguage] = useState<"VN" | "EN">("EN");
 
   useEffect(() => {
     if (!comingSoonOpen) return;
@@ -188,7 +189,7 @@ export default function BookofHistory1() {
   }, [comingSoonOpen]);
 
   return (
-    <section className="book-of-history-page">
+    <section className={`book-of-history-page ${menuOpen ? "sidebar-open" : ""}`}>
       {/* Background blobs */}
       <div className="book-blob book-blob-mint" />
       <div className="book-blob book-blob-yellow" />
@@ -241,9 +242,23 @@ export default function BookofHistory1() {
 </span>
         </button>
 
-        <div className="book-language">
-          <button type="button">VN</button>
-          <button type="button">EN</button>
+        <div className="book-language" aria-label="Language selector">
+          <button
+            type="button"
+            className={language === "VN" ? "active" : ""}
+            aria-pressed={language === "VN"}
+            onClick={() => setLanguage("VN")}
+          >
+            VN
+          </button>
+          <button
+            type="button"
+            className={language === "EN" ? "active" : ""}
+            aria-pressed={language === "EN"}
+            onClick={() => setLanguage("EN")}
+          >
+            EN
+          </button>
         </div>
       </header>
 

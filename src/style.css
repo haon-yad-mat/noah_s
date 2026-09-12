@@ -1109,3 +1109,144 @@ button {
   font-weight: 400;
   line-height: 26px;
 }
+
+/* =========================================================
+   FINAL RESPONSIVE + SIDEBAR PUSH FIXES
+   ========================================================= */
+
+/* -------------------------
+   Landing page: fit screen
+   ------------------------- */
+
+.landing-page {
+  height: 100dvh;
+  min-height: 100dvh;
+}
+
+.hero {
+  height: 100%;
+  min-height: 0;
+  padding-top: clamp(40px, 8vh, 64px);
+}
+
+.face-container {
+  max-height: calc(100dvh - 300px);
+  width: min(702px, 70vw, 46dvh);
+}
+
+.face-container img {
+  width: 100%;
+  height: auto;
+}
+
+.eye-scroll-indicator {
+  z-index: 5;
+  pointer-events: none;
+}
+
+.eye-scroll-indicator-left {
+  top: 82%;
+  left: 32.4%;
+}
+
+.eye-scroll-indicator-right {
+  top: 82%;
+  left: 56.7%;
+}
+
+
+/* -------------------------
+   Page 2: sidebar pushes page
+   ------------------------- */
+
+.book-of-history-page {
+  width: 100%;
+  margin-left: 0;
+
+  transition:
+    width 0.25s ease,
+    margin-left 0.25s ease;
+}
+
+.book-of-history-page.sidebar-open {
+  width: calc(100% - 288px);
+  margin-left: 288px;
+}
+
+
+/* Hide "Book of history >>" while menu is open */
+
+.book-of-history-page.sidebar-open .book-menu-button {
+  visibility: hidden;
+}
+
+
+/* -------------------------
+   Sidebar
+   ------------------------- */
+
+.book-sidebar {
+  width: 288px;
+  max-width: 288px;
+
+  background: #F3EEFF;
+
+  opacity: 1;
+
+  animation-duration: 0.22s;
+}
+
+
+/* Backdrop only covers the area beside sidebar */
+
+.book-sidebar-backdrop {
+  left: 288px;
+  width: calc(100vw - 288px);
+
+  background: rgba(58, 47, 71, 0.2);
+}
+
+
+/* Keep sidebar text at 16px */
+
+.book-sidebar-nav-row {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+
+/* Hover */
+
+.book-sidebar-nav-row:not(.active):hover {
+  background: #D6D0DE;
+}
+
+
+/* -------------------------
+   Page 2 language toggle
+   ------------------------- */
+
+.book-language button.active {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+
+/* -------------------------
+   Mobile
+   ------------------------- */
+
+@media (max-width: 600px) {
+  .book-of-history-page.sidebar-open {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .book-sidebar {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .book-sidebar-backdrop {
+    display: none;
+  }
+}
