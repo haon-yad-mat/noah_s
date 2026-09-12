@@ -197,50 +197,52 @@ export default function BookofHistory1() {
 
       {/* Header */}
       <header className="book-header">
-        <button
-          className="book-menu-button"
-          type="button"
-          onClick={() => setMenuOpen(true)}
-          aria-label="Open menu"
-        >
-          <svg
-  className="book-menu-icon"
-  width="20"
-  height="20"
-  viewBox="0 0 20 20"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
-  aria-hidden="true"
->
-  <path
-    d="M4.33313 5.16654L5.4998 6.33321M1.6665 10.8333H3.33317M16.6665 10.8333H18.3332M14.4998 6.33321L15.6664 5.16654M18.3332 14.1666H1.6665M18.3332 17.4999H1.6665M13.3332 10.8333C13.3332 9.9492 12.982 9.10135 12.3569 8.47623C11.7317 7.85111 10.8839 7.49992 9.99984 7.49992C9.11578 7.49992 8.26794 7.85111 7.64281 8.47623C7.01769 9.10135 6.6665 9.9492 6.6665 10.8333M9.99984 4.16659V2.08325"
-    stroke="#44418D"
-    strokeWidth="1.6"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  />
-</svg>
-
-          <span>Book of history</span>
-
-          <span className="book-menu-arrow" aria-hidden="true">
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
+        {!menuOpen && (
+  <button
+    className="book-menu-button"
+    type="button"
+    onClick={() => setMenuOpen(true)}
+    aria-label="Open menu"
   >
-    <path
-      d="M6 17L11 12L6 7M13 17L18 12L13 7"
-      stroke="#44418D"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-</span>
-        </button>
+    <svg
+      className="book-menu-icon"
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <path
+        d="M4.33313 5.16654L5.4998 6.33321M1.6665 10.8333H3.33317M16.6665 10.8333H18.3332M14.4998 6.33321L15.6664 5.16654M18.3332 14.1666H1.6665M18.3332 17.4999H1.6665M13.3332 10.8333C13.3332 9.9492 12.982 9.10135 12.3569 8.47623C11.7317 7.85111 10.8839 7.49992 9.99984 7.49992C9.11578 7.49992 8.26794 7.85111 7.64281 8.47623C7.01769 9.10135 6.6665 9.9492 6.6665 10.8333M9.99984 4.16659V2.08325"
+        stroke="#44418D"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+
+    <span>Book of history</span>
+
+    <span className="book-menu-arrow" aria-hidden="true">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M6 17L11 12L6 7M13 17L18 12L13 7"
+          stroke="#44418D"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  </button>
+)}
 
         <div className="book-language" aria-label="Language selector">
           <button
@@ -292,17 +294,35 @@ export default function BookofHistory1() {
     aria-modal="true"
     aria-label="Navigation menu"
   >
-    <button
-      type="button"
-      aria-label="Close navigation menu"
-      onClick={() => setMenuOpen(false)}
-      className="book-sidebar-backdrop"
-    />
 
     <aside className="book-sidebar">
   <div className="book-sidebar-section">
     <div className="book-sidebar-section-title">
-      EXPLORE
+      <span>EXPLORE</span>
+
+      <button
+        type="button"
+        className="book-sidebar-close"
+        onClick={() => setMenuOpen(false)}
+        aria-label="Close navigation menu"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            d="M18 7L13 12L18 17M11 7L6 12L11 17"
+            stroke="#44418D"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
     </div>
 
     {exploreItems.map((item) => (
