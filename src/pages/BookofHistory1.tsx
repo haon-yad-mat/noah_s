@@ -192,7 +192,17 @@ const quickStopItems = [
     ),
   },
 ];
-export default function BookofHistory1() {
+type Language = "VN" | "EN";
+
+type BookofHistory1Props = {
+  language: Language;
+  setLanguage: (value: Language) => void;
+};
+
+export default function BookofHistory1({
+  language,
+  setLanguage,
+}: BookofHistory1Props) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const [infoTooltip, setInfoTooltip] = useState<{
@@ -202,7 +212,6 @@ export default function BookofHistory1() {
   } | null>(null);
 
   const [comingSoonOpen, setComingSoonOpen] = useState(false);
-  const [language, setLanguage] = useState<"VN" | "EN">("EN");
   const sectionRef = useRef<HTMLElement | null>(null);
   const page2VisibleRef = useRef(false);
   const hoverCountRef = useRef(0);

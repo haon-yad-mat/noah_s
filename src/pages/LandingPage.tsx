@@ -1,8 +1,11 @@
-import { useState } from "react";
+type Language = "VN" | "EN";
 
-export default function LandingPage() {
-  const [language, setLanguage] = useState<"VN" | "EN">("EN");
+type LandingPageProps = {
+  language: Language;
+  setLanguage: (value: Language) => void;
+};
 
+export default function LandingPage({ language, setLanguage }: LandingPageProps) {
   return (
     <section className="landing-page">
       <div className="blob blob-highlight" aria-hidden="true" />

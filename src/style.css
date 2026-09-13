@@ -589,8 +589,12 @@ button {
   border-right: 0;
 }
 
-.book-language button:first-child {
+.book-language button.active {
   background: rgba(0, 0, 0, 0.04);
+}
+
+.book-history-2-language {
+  margin-bottom: 18px;
 }
 
 /* ---------- Main ---------- */
@@ -1453,7 +1457,7 @@ button {
 }
 
 .book-history-2-scrolling {
-  color: #000000;
+  color: #CE0018;
   font-weight: 500;
 }
 

@@ -19,7 +19,17 @@ const COPY_GAP = 80;
 const COPY_WIDTH = 523;
 const SIDEBAR_HALF_WIDTH = 144;
 
-export default function BookofHistory2() {
+type Language = "VN" | "EN";
+
+type BookofHistory2Props = {
+  language: Language;
+  setLanguage: (value: Language) => void;
+};
+
+export default function BookofHistory2({
+  language,
+  setLanguage,
+}: BookofHistory2Props) {
   const [progress, setProgress] = useState(0);
   const [frameStyle, setFrameStyle] = useState<CSSProperties>({});
   const [contentStyle, setContentStyle] = useState<CSSProperties>({});
@@ -188,6 +198,25 @@ export default function BookofHistory2() {
             <h2>
               I&rsquo;m <span>Noah</span>
             </h2>
+
+            <div className="book-language book-history-2-language" aria-label="Language selector">
+              <button
+                type="button"
+                className={language === "VN" ? "active" : ""}
+                aria-pressed={language === "VN"}
+                onClick={() => setLanguage("VN")}
+              >
+                VN
+              </button>
+              <button
+                type="button"
+                className={language === "EN" ? "active" : ""}
+                aria-pressed={language === "EN"}
+                onClick={() => setLanguage("EN")}
+              >
+                EN
+              </button>
+            </div>
 
             <div className="book-history-2-intro">
               <p>
