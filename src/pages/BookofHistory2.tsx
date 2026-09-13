@@ -199,25 +199,6 @@ export default function BookofHistory2({
               I&rsquo;m <span>Noah</span>
             </h2>
 
-            <div className="book-language book-history-2-language" aria-label="Language selector">
-              <button
-                type="button"
-                className={language === "VN" ? "active" : ""}
-                aria-pressed={language === "VN"}
-                onClick={() => setLanguage("VN")}
-              >
-                VN
-              </button>
-              <button
-                type="button"
-                className={language === "EN" ? "active" : ""}
-                aria-pressed={language === "EN"}
-                onClick={() => setLanguage("EN")}
-              >
-                EN
-              </button>
-            </div>
-
             <div className="book-history-2-intro">
               <p>
                 I can do a lot of stuff.
