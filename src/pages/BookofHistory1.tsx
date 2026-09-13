@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 const InfoIcon = () => (
   <svg
     width="24"
@@ -26,67 +26,24 @@ const InfoIcon = () => (
 const SocialIcons = () => (
   <div className="book-sidebar-social-area">
     <div className="book-sidebar-social-row">
-      <a
-        href="https://www.linkedin.com/in/this-is-noah"
-        className="book-sidebar-social"
-        aria-label="LinkedIn"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="/noah_s_portfolio/images/LinkedinLogo.svg"
-          alt="LinkedIn"
-        />
+      <a href="https://www.linkedin.com/in/this-is-noah" className="book-sidebar-social" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+        <img src="/noah_s_portfolio/images/LinkedinLogo.svg" alt="LinkedIn" />
       </a>
 
-      <a
-        href="https://www.instagram.com/it3ju5t_noah/"
-        className="book-sidebar-social"
-        aria-label="Instagram"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="/noah_s_portfolio/images/IGLogo.svg"
-          alt="Instagram"
-        />
+      <a href="https://www.instagram.com/it3ju5t_noah/" className="book-sidebar-social" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+        <img src="/noah_s_portfolio/images/IGLogo.svg" alt="Instagram" />
       </a>
 
-      <a
-        href="mailto:luutmtam@gmail.com"
-        className="book-sidebar-social"
-        aria-label="Email"
-      >
-        <img
-          src="/noah_s_portfolio/images/GmailLogo.svg"
-          alt="Gmail"
-        />
+      <a href="mailto:luutmtam@gmail.com" className="book-sidebar-social" aria-label="Gmail">
+        <img src="/noah_s_portfolio/images/GmailLogo.svg" alt="Gmail" />
       </a>
 
-      <a
-        href="https://www.tiktok.com/@noah.overthinker?lang=en"
-        className="book-sidebar-social"
-        aria-label="TikTok"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="/noah_s_portfolio/images/TiktokLogo.svg"
-          alt="TikTok"
-        />
+      <a href="https://www.tiktok.com/@noah.overthinker?lang=en" className="book-sidebar-social" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+        <img src="/noah_s_portfolio/images/TiktokLogo.svg" alt="TikTok" />
       </a>
 
-      <a
-        href="https://www.facebook.com/just.lemme.name.myself.noah/"
-        className="book-sidebar-social"
-        aria-label="Facebook"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="/noah_s_portfolio/images/FbLogo.svg"
-          alt="Facebook"
-        />
+      <a href="https://www.facebook.com/just.lemme.name.myself.noah/" className="book-sidebar-social" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+        <img src="/noah_s_portfolio/images/FbLogo.svg" alt="Facebook" />
       </a>
     </div>
   </div>
@@ -246,6 +203,216 @@ export default function BookofHistory1() {
 
   const [comingSoonOpen, setComingSoonOpen] = useState(false);
   const [language, setLanguage] = useState<"VN" | "EN">("EN");
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const page2VisibleRef = useRef(false);
+  const hoverCountRef = useRef(0);
+  const lastHoverXRef = useRef<number | null>(null);
+  const lastHoverCountAtRef = useRef(0);
+  const idleTimerRef = useRef<number | null>(null);
+  const reverseAnimationRef = useRef<number | null>(null);
+  const page3ProgressRef = useRef(0);
+  const [page3Progress, setPage3Progress] = useState(0);
+
+  const commitPage3Progress = (nextProgress: number) => {
+    const clamped = Math.max(0, Math.min(1, nextProgress));
+
+    page3ProgressRef.current = clamped;
+    setPage3Progress(clamped);
+
+    window.dispatchEvent(
+      new CustomEvent("book-history-2-progress", {
+        detail: { progress: clamped },
+      }),
+    );
+
+    if (clamped >= 1 && idleTimerRef.current !== null) {
+      window.clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = null;
+    }
+  };
+
+  const clearIdleTimer = () => {
+    if (idleTimerRef.current !== null) {
+      window.clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = null;
+    }
+  };
+
+  const scheduleIdleTransition = () => {
+    clearIdleTimer();
+
+    // IMPORTANT:
+    // Idle auto-transition only exists while Page 2 is actually on screen.
+    if (!page2VisibleRef.current) return;
+    if (page3ProgressRef.current >= 1) return;
+
+    idleTimerRef.current = window.setTimeout(() => {
+      if (page2VisibleRef.current && page3ProgressRef.current < 1) {
+        commitPage3Progress(1);
+      }
+    }, 3000);
+  };
+
+  const registerHoverAction = () => {
+    if (page3ProgressRef.current >= 1) return;
+
+    hoverCountRef.current = Math.min(3, hoverCountRef.current + 1);
+    commitPage3Progress(hoverCountRef.current / 3);
+
+    if (page2VisibleRef.current) {
+      scheduleIdleTransition();
+    }
+  };
+
+  const handleFaceEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (page3ProgressRef.current >= 1) return;
+
+    lastHoverXRef.current = event.clientX;
+    lastHoverCountAtRef.current = performance.now();
+
+    // Entering the frame still counts as one hover action.
+    registerHoverAction();
+  };
+
+  const handleFaceMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (page3ProgressRef.current >= 1) return;
+
+    const previousX = lastHoverXRef.current;
+
+    if (previousX === null) {
+      lastHoverXRef.current = event.clientX;
+      return;
+    }
+
+    const distance = Math.abs(event.clientX - previousX);
+    const now = performance.now();
+
+    /*
+     * A meaningful sweep inside the frame counts too.
+     * 70px prevents tiny mouse jitter from instantly triggering all 3 steps.
+     * 180ms prevents one fast browser mousemove burst from double-counting.
+     */
+    if (
+      distance >= 70 &&
+      now - lastHoverCountAtRef.current >= 180
+    ) {
+      lastHoverXRef.current = event.clientX;
+      lastHoverCountAtRef.current = now;
+      registerHoverAction();
+    }
+  };
+
+  const handleFaceLeave = () => {
+    lastHoverXRef.current = null;
+  };
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Consider Page 2 "active" only when most of it is visible.
+        page2VisibleRef.current =
+          entry.isIntersecting && entry.intersectionRatio >= 0.65;
+
+        if (page2VisibleRef.current && page3ProgressRef.current < 1) {
+          scheduleIdleTransition();
+        } else {
+          clearIdleTimer();
+        }
+      },
+      {
+        threshold: [0, 0.65, 1],
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+      clearIdleTimer();
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleActivity = () => {
+      // Do NOT let activity on Page 1 reset/start Page 2's timer.
+      if (
+        page2VisibleRef.current &&
+        page3ProgressRef.current < 1
+      ) {
+        scheduleIdleTransition();
+      }
+    };
+
+    const handleReverse = () => {
+      if (page3ProgressRef.current <= 0) return;
+
+      clearIdleTimer();
+
+      if (reverseAnimationRef.current !== null) {
+        window.cancelAnimationFrame(reverseAnimationRef.current);
+      }
+
+      const startProgress = page3ProgressRef.current;
+      const startTime = performance.now();
+      const duration = 420;
+
+      const animateBack = (now: number) => {
+        const elapsed = now - startTime;
+        const t = Math.min(1, elapsed / duration);
+
+        const eased =
+          t < 0.5
+            ? 2 * t * t
+            : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+        commitPage3Progress(startProgress * (1 - eased));
+
+        if (t < 1) {
+          reverseAnimationRef.current =
+            window.requestAnimationFrame(animateBack);
+          return;
+        }
+
+        reverseAnimationRef.current = null;
+        hoverCountRef.current = 0;
+        lastHoverXRef.current = null;
+        lastHoverCountAtRef.current = 0;
+        commitPage3Progress(0);
+
+        if (page2VisibleRef.current) {
+          scheduleIdleTransition();
+        }
+      };
+
+      reverseAnimationRef.current =
+        window.requestAnimationFrame(animateBack);
+    };
+
+    window.addEventListener("mousemove", handleActivity);
+    window.addEventListener("mousedown", handleActivity);
+    window.addEventListener("keydown", handleActivity);
+    window.addEventListener("wheel", handleActivity, { passive: true });
+    window.addEventListener("touchstart", handleActivity, { passive: true });
+    window.addEventListener("book-history-2-reverse", handleReverse);
+
+    return () => {
+      clearIdleTimer();
+
+      if (reverseAnimationRef.current !== null) {
+        window.cancelAnimationFrame(reverseAnimationRef.current);
+      }
+
+      window.removeEventListener("mousemove", handleActivity);
+      window.removeEventListener("mousedown", handleActivity);
+      window.removeEventListener("keydown", handleActivity);
+      window.removeEventListener("wheel", handleActivity);
+      window.removeEventListener("touchstart", handleActivity);
+      window.removeEventListener("book-history-2-reverse", handleReverse);
+    };
+  }, []);
 
   useEffect(() => {
     if (!comingSoonOpen) return;
@@ -258,7 +425,17 @@ export default function BookofHistory1() {
   }, [comingSoonOpen]);
 
   return (
-    <section className={`book-of-history-page ${menuOpen ? "sidebar-open" : ""}`}>
+    <section
+      ref={sectionRef}
+      className={`book-of-history-page ${menuOpen ? "sidebar-open" : ""} ${
+        page3Progress > 0 ? "page3-transitioning" : ""
+      }`}
+      style={
+        {
+          "--book-progress": page3Progress,
+        } as CSSProperties
+      }
+    >
       {/* Background blobs */}
       <div className="book-blob book-blob-mint" />
       <div className="book-blob book-blob-yellow" />
@@ -335,17 +512,25 @@ export default function BookofHistory1() {
 
       {/* Main content */}
       <main className="book-main">
-        <div className="book-face-frame">
+        <div
+          className="book-face-frame"
+          onMouseEnter={handleFaceEnter}
+          onMouseMove={handleFaceMove}
+          onMouseLeave={handleFaceLeave}
+        >
           <img
-            src="/noah_s_portfolio/images/mặt.svg"
+            src="/noah_s_portfolio/images/portrait1.svg"
             alt="Noah"
           />
         </div>
 
         <h1 className="book-quote">
-          <span>Actions</span> speak
-          <br />
-          louder than words
+          <span className="book-quote-line book-quote-line-top">
+            <span>Actions</span> speak
+          </span>
+          <span className="book-quote-line book-quote-line-bottom">
+            louder than words
+          </span>
         </h1>
       </main>
 

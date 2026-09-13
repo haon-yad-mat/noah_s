@@ -1,604 +1,233 @@
 import { useEffect, useRef } from "react";
 
-type Rect = {
-  left: number;
-  top: number;
-  width: number;
-  height: number;
+const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
+const lerp = (from: number, to: number, t: number) =>
+  from + (to - from) * t;
+
+type Geometry = {
+  sourceLeft: number;
+  sourceTop: number;
+  sourceWidth: number;
+  sourceHeight: number;
+  targetLeft: number;
+  targetTop: number;
+  targetWidth: number;
+  targetHeight: number;
+  startScrollY: number;
+  endScrollY: number;
 };
 
-function getViewportRect(element: HTMLElement): Rect {
-  const rect = element.getBoundingClientRect();
-
-  return {
-    left: rect.left,
-    top: rect.top,
-    width: rect.width,
-    height: rect.height,
-  };
-}
-
-function lerp(start: number, end: number, progress: number) {
-  return start + (end - start) * progress;
-}
-
-function easeInOutCubic(value: number) {
-  return value < 0.5
-    ? 4 * value * value * value
-    : 1 - Math.pow(-2 * value + 2, 3) / 2;
-}
-
-function easeOutCubic(value: number) {
-  return 1 - Math.pow(1 - value, 3);
-}
-
 export default function FaceTransition() {
-  const faceRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
-
-  const revealStartTimeRef = useRef<number | null>(null);
-  const previousProgressRef = useRef(0);
-  const animationFrameRef = useRef<number | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const sourceFaceRef = useRef<HTMLImageElement>(null);
+  const targetPortraitRef = useRef<HTMLImageElement>(null);
+  const geometryRef = useRef<Geometry | null>(null);
 
   useEffect(() => {
-    const face = faceRef.current;
-    const image = imageRef.current;
+    const transition = rootRef.current;
+    const transitionSource = sourceFaceRef.current;
+    const transitionTarget = targetPortraitRef.current;
+
+    if (!transition || !transitionSource || !transitionTarget) return;
+
+    const sourceImg = document.querySelector(
+      ".face-container > img",
+    ) as HTMLImageElement | null;
 
     const sourceContainer = document.querySelector(
-      ".face-container"
+      ".face-container",
     ) as HTMLElement | null;
-
-    const sourceImage = sourceContainer?.querySelector(
-      "img"
-    ) as HTMLImageElement | null;
-
-    const targetFrame = document.querySelector(
-      ".book-face-frame"
-    ) as HTMLElement | null;
-
-    const targetImage = document.querySelector(
-      ".book-face-frame img"
-    ) as HTMLImageElement | null;
 
     const landingPage = document.querySelector(
-      ".landing-page"
+      ".landing-page",
     ) as HTMLElement | null;
 
+    const targetFrame = document.querySelector(
+      ".book-face-frame",
+    ) as HTMLElement | null;
+
+    const targetImg = document.querySelector(
+      ".book-face-frame > img",
+    ) as HTMLImageElement | null;
+
     const bookPage = document.querySelector(
-      ".book-of-history-page"
+      ".book-of-history-page",
     ) as HTMLElement | null;
 
     if (
-      !face ||
-      !image ||
+      !sourceImg ||
       !sourceContainer ||
-      !sourceImage ||
-      !targetFrame ||
-      !targetImage ||
       !landingPage ||
+      !targetFrame ||
+      !targetImg ||
       !bookPage
     ) {
       return;
     }
 
-    /*
-     * =====================================================
-     * TIMING
-     * =====================================================
-     */
-
-    const ARRIVAL_DELAY = 10;
-    const REVEAL_DURATION = 10;
-
-    /*
-     * =====================================================
-     * MAIN UPDATE
-     * =====================================================
-     */
-
-    const update = () => {
-      const scrollY = window.scrollY;
-
+    const measure = () => {
       /*
-       * -----------------------------------------------------
-       * 1. PAGE 1 → PAGE 2 PROGRESS
-       * -----------------------------------------------------
-       *
-       * Progress:
-       *
-       * 0 = top of Page 1
-       * 1 = top of Page 2
+       * Measure both endpoints in DOCUMENT coordinates, then convert each
+       * endpoint to the viewport coordinates it has when its page is active.
+       * This prevents getBoundingClientRect() from drifting as the user scrolls.
        */
+      const currentScrollY = window.scrollY;
 
-      const landingRect =
-        landingPage.getBoundingClientRect();
+      const sourceRect = sourceContainer.getBoundingClientRect();
+      const targetRect = targetFrame.getBoundingClientRect();
+      const landingRect = landingPage.getBoundingClientRect();
+      const bookRect = bookPage.getBoundingClientRect();
 
-      const bookRect =
-        bookPage.getBoundingClientRect();
+      const sourceDocTop = sourceRect.top + currentScrollY;
+      const targetDocTop = targetRect.top + currentScrollY;
+      const landingDocTop = landingRect.top + currentScrollY;
+      const bookDocTop = bookRect.top + currentScrollY;
 
-      const pageDistance =
-        bookRect.top - landingRect.top;
+      geometryRef.current = {
+        sourceLeft: sourceRect.left,
+        sourceTop: sourceDocTop - landingDocTop,
+        sourceWidth: sourceRect.width,
+        sourceHeight: sourceRect.height,
 
-      if (pageDistance <= 0) {
-        return;
-      }
+        targetLeft: targetRect.left,
+        targetTop: targetDocTop - bookDocTop,
+        targetWidth: targetRect.width,
+        targetHeight: targetRect.height,
 
-      const progress = Math.max(
-        0,
-        Math.min(
-          1,
-          scrollY / pageDistance
-        )
+        startScrollY: landingDocTop,
+        endScrollY: bookDocTop,
+      };
+    };
+
+    const render = () => {
+      const geometry = geometryRef.current;
+      if (!geometry) return;
+
+      const distance = Math.max(
+        1,
+        geometry.endScrollY - geometry.startScrollY,
+      );
+
+      const progress = clamp01(
+        (window.scrollY - geometry.startScrollY) / distance,
       );
 
       /*
-       * -----------------------------------------------------
-       * 2. GET CURRENT ELEMENT POSITIONS
-       * -----------------------------------------------------
-       */
-
-      const sourceRect =
-        getViewportRect(sourceContainer);
-
-      const targetFrameRect =
-        getViewportRect(targetFrame);
-
-      const targetImageRect =
-        getViewportRect(targetImage);
-
-      /*
-       * -----------------------------------------------------
-       * 3. FACE TRANSITION
-       * -----------------------------------------------------
-       *
-       * The transition clone moves:
-       *
-       * Page 1 face
-       *       ↓
-       * Page 2 face
-       */
-
-      const startLeft =
-        sourceRect.left;
-
-      const startTop =
-        sourceRect.top;
-
-      const endLeft =
-        targetImageRect.left;
-
-      const endTop =
-        targetImageRect.top;
-
-      /*
-       * Smooth movement.
-       *
-       * This keeps the face movement natural rather than
-       * simply jumping between the two positions.
-       */
-
-      const movementProgress =
-        easeInOutCubic(progress);
-
-      const faceLeft =
-        lerp(
-          startLeft,
-          endLeft,
-          movementProgress
-        );
-
-      const faceTop =
-        lerp(
-          startTop,
-          endTop,
-          movementProgress
-        );
-
-      /*
-       * -----------------------------------------------------
-       * 4. SCALE
-       * -----------------------------------------------------
-       */
-
-      const finalScale =
-        targetImageRect.width /
-        sourceRect.width;
-
-      const faceScale =
-        lerp(
-          1,
-          finalScale,
-          movementProgress
-        );
-
-      const faceWidth =
-        sourceRect.width *
-        faceScale;
-
-      const faceHeight =
-        sourceRect.height *
-        faceScale;
-
-      face.style.left =
-        `${faceLeft}px`;
-
-      face.style.top =
-        `${faceTop}px`;
-
-      face.style.width =
-        `${faceWidth}px`;
-
-      face.style.height =
-        `${faceHeight}px`;
-
-      image.style.left =
-        "0px";
-
-      image.style.top =
-        "0px";
-
-      image.style.width =
-        `${faceWidth}px`;
-
-      image.style.height =
-        `${faceHeight}px`;
-
-      /*
-       * -----------------------------------------------------
-       * 5. ARRIVAL
-       * -----------------------------------------------------
-       *
-       * When the face reaches Page 2:
-       *
-       * face arrives
-       * ↓
-       * wait 10ms
-       * ↓
-       * red frame reveals
-       */
-
-      const justReachedEnd =
-        previousProgressRef.current < 1 &&
-        progress >= 1;
-
-      if (justReachedEnd) {
-        revealStartTimeRef.current =
-          performance.now() +
-          ARRIVAL_DELAY;
-      }
-
-      /*
-       * If user scrolls back to Page 1,
-       * cancel the reveal.
-       */
-
-      if (
-        progress < 1 &&
-        previousProgressRef.current >= 1
-      ) {
-        revealStartTimeRef.current =
-          null;
-      }
-
-      previousProgressRef.current =
-        progress;
-
-      /*
-       * -----------------------------------------------------
-       * 6. RED FRAME REVEAL PROGRESS
-       * -----------------------------------------------------
-       */
-
-      let revealProgress = 0;
-
-      if (
-        progress >= 1 &&
-        revealStartTimeRef.current !== null
-      ) {
-        const elapsed =
-          performance.now() -
-          revealStartTimeRef.current;
-
-        if (elapsed > 0) {
-          revealProgress =
-            Math.max(
-              0,
-              Math.min(
-                1,
-                elapsed /
-                  REVEAL_DURATION
-              )
-            );
-        }
-      }
-
-      const easedReveal =
-        easeOutCubic(
-          revealProgress
-        );
-
-      /*
-       * -----------------------------------------------------
-       * 7. FIND CENTER OF FACE
-       * -----------------------------------------------------
-       */
-
-      const faceCenterX =
-        targetImageRect.left +
-        targetImageRect.width / 2;
-
-      const faceCenterY =
-        targetImageRect.top +
-        targetImageRect.height / 2;
-
-      const frameCenterX =
-        faceCenterX -
-        targetFrameRect.left;
-
-      const frameCenterY =
-        faceCenterY -
-        targetFrameRect.top;
-
-      /*
-       * -----------------------------------------------------
-       * 8. INITIAL CLIP
-       * -----------------------------------------------------
-       *
-       * The red frame begins as a tiny rectangle
-       * at the center of the face.
-       */
-
-      const clipStartTop =
-        frameCenterY;
-
-      const clipStartRight =
-        targetFrameRect.width -
-        frameCenterX;
-
-      const clipStartBottom =
-        targetFrameRect.height -
-        frameCenterY;
-
-      const clipStartLeft =
-        frameCenterX;
-
-      /*
-       * -----------------------------------------------------
-       * 9. EXPAND RED FRAME FROM CENTER
-       * ----------------------------------------------------- */
-
-      const clipTop =
-        lerp(
-          clipStartTop,
-          0,
-          easedReveal
-        );
-
-      const clipRight =
-        lerp(
-          clipStartRight,
-          0,
-          easedReveal
-        );
-
-      const clipBottom =
-        lerp(
-          clipStartBottom,
-          0,
-          easedReveal
-        );
-
-      const clipLeft =
-        lerp(
-          clipStartLeft,
-          0,
-          easedReveal
-        );
-
-      /*
-       * -----------------------------------------------------
-       * 10. BEFORE ARRIVAL
-       * -----------------------------------------------------
-       *
        * IMPORTANT:
-       *
-       * We do NOT modify sourceImage.opacity.
-       *
-       * This means:
-       *
-       * .face-container
-       * ├── face SVG
-       * ├── scroll
-       * └── down
-       *
-       * remains completely untouched.
+       * progress=0: real landing face is visible.
+       * 0<progress<1: fixed clone moves between exact measured boxes.
+       * progress=1: real Page 2 portrait/frame is visible.
        */
-
-      if (progress < 1) {
-        face.style.visibility =
-          "visible";
-
-        targetFrame.style.opacity =
-          "1";
-
-        targetImage.style.opacity =
-          "0";
-
-        targetFrame.style.clipPath =
-          `inset(
-            ${clipStartTop}px
-            ${clipStartRight}px
-            ${clipStartBottom}px
-            ${clipStartLeft}px
-            round 15px
-          )`;
-
-        revealStartTimeRef.current =
-          null;
-
-        /*
-         * Keep transition clone synchronized
-         * with the original face.
-         */
-
-        face.style.display =
-          "block";
-      }
-
-      /*
-       * -----------------------------------------------------
-       * 11. PAGE 2 REVEAL
-       * ----------------------------------------------------- */
-
-      if (progress >= 1) {
-        face.style.visibility =
-          "visible";
-
-        targetFrame.style.opacity =
-          "1";
-
-        targetImage.style.opacity =
-          "0";
-
-        targetFrame.style.clipPath =
-          `inset(
-            ${clipTop}px
-            ${clipRight}px
-            ${clipBottom}px
-            ${clipLeft}px
-            round 15px
-          )`;
-      }
-
-      /*
-       * -----------------------------------------------------
-       * 12. REVEAL FINISHED
-       * ----------------------------------------------------- */
-
-      if (
-        progress >= 1 &&
-        revealProgress >= 1
-      ) {
-        targetFrame.style.clipPath =
-          "inset(0px 0px 0px 0px round 15px)";
-
-        targetImage.style.opacity =
-          "1";
-
-        face.style.visibility =
-          "hidden";
-
-        revealStartTimeRef.current =
-          null;
-
+      if (progress <= 0.001) {
+        transition.style.visibility = "hidden";
+        sourceImg.style.opacity = "1";
+        targetImg.style.opacity = "1";
         return;
       }
 
+      if (progress >= 0.999) {
+        transition.style.visibility = "hidden";
+        sourceImg.style.opacity = "1";
+        targetImg.style.opacity = "1";
+        return;
+      }
+
+      sourceImg.style.opacity = "0";
+      targetImg.style.opacity = "0";
+      transition.style.visibility = "visible";
+
+      const eased =
+        progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+      transition.style.left = `${lerp(
+        geometry.sourceLeft,
+        geometry.targetLeft,
+        eased,
+      )}px`;
+
+      transition.style.top = `${lerp(
+        geometry.sourceTop,
+        geometry.targetTop,
+        eased,
+      )}px`;
+
+      transition.style.width = `${lerp(
+        geometry.sourceWidth,
+        geometry.targetWidth,
+        eased,
+      )}px`;
+
+      transition.style.height = `${lerp(
+        geometry.sourceHeight,
+        geometry.targetHeight,
+        eased,
+      )}px`;
+
+      transition.style.borderRadius = `${lerp(0, 15, eased)}px`;
+
       /*
-       * -----------------------------------------------------
-       * 13. CONTINUE REVEAL ANIMATION
-       * ----------------------------------------------------- */
+       * Use the same center-crop rule for both images.
+       * The target portrait gradually replaces the landing face near the end.
+       */
+      const portraitOpacity = clamp01((progress - 0.62) / 0.30);
 
-      if (
-        progress >= 1 &&
-        revealStartTimeRef.current !== null
-      ) {
-        animationFrameRef.current =
-          requestAnimationFrame(update);
-      }
+      transitionSource.style.opacity = `${1 - portraitOpacity}`;
+      transitionTarget.style.opacity = `${portraitOpacity}`;
     };
 
-    /*
-     * =====================================================
-     * SCROLL / RESIZE
-     * =====================================================
-     */
-
-    const requestUpdate = () => {
-      if (
-        animationFrameRef.current !== null
-      ) {
-        cancelAnimationFrame(
-          animationFrameRef.current
-        );
-      }
-
-      animationFrameRef.current =
-        requestAnimationFrame(update);
+    const measureAndRender = () => {
+      measure();
+      render();
     };
 
-    window.addEventListener(
-      "scroll",
-      requestUpdate,
-      { passive: true }
-    );
+    measureAndRender();
 
-    window.addEventListener(
-      "resize",
-      requestUpdate
-    );
-
-    /*
-     * Initial state
-     */
-
-    update();
-
-    /*
-     * =====================================================
-     * CLEANUP
-     * ===================================================== */
+    window.addEventListener("scroll", render, { passive: true });
+    window.addEventListener("resize", measureAndRender);
 
     return () => {
-      if (
-        animationFrameRef.current !== null
-      ) {
-        cancelAnimationFrame(
-          animationFrameRef.current
-        );
-      }
+      window.removeEventListener("scroll", render);
+      window.removeEventListener("resize", measureAndRender);
 
-      window.removeEventListener(
-        "scroll",
-        requestUpdate
-      );
-
-      window.removeEventListener(
-        "resize",
-        requestUpdate
-      );
-
-      /*
-       * Restore Page 2.
-       */
-
-      targetFrame.style.opacity =
-        "";
-
-      targetFrame.style.clipPath =
-        "";
-
-      targetImage.style.opacity =
-        "";
-
-      /*
-       * IMPORTANT:
-       * We never changed sourceImage.opacity,
-       * so there is nothing to restore.
-       */
+      sourceImg.style.opacity = "1";
+      targetImg.style.opacity = "1";
     };
   }, []);
 
   return (
-    <div
-      ref={faceRef}
-      className="face-transition"
-      aria-hidden="true"
-    >
+    <div ref={rootRef} className="face-transition" aria-hidden="true">
       <img
-        ref={imageRef}
+        ref={sourceFaceRef}
         src="/noah_s_portfolio/images/mặt.svg"
         alt=""
+        style={{
+          position: "absolute",
+          left: 0,
+          top: "50%",
+          width: "100%",
+          height: "auto",
+          transform: "translateY(-50%)",
+          objectFit: "contain",
+          opacity: 1,
+        }}
+      />
+
+      <img
+        ref={targetPortraitRef}
+        src="/noah_s_portfolio/images/portrait1.svg"
+        alt=""
+        style={{
+          position: "absolute",
+          left: 0,
+          top: "50%",
+          width: "100%",
+          height: "auto",
+          transform: "translateY(-50%)",
+          objectFit: "contain",
+          opacity: 0,
+        }}
       />
     </div>
   );
