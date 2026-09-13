@@ -23,6 +23,75 @@ const InfoIcon = () => (
   </svg>
 );
 
+const SocialIcons = () => (
+  <div className="book-sidebar-social-area">
+    <div className="book-sidebar-social-row">
+      <a
+        href="https://www.linkedin.com/in/this-is-noah"
+        className="book-sidebar-social"
+        aria-label="LinkedIn"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="/noah_s_portfolio/images/LinkedinLogo.svg"
+          alt="LinkedIn"
+        />
+      </a>
+
+      <a
+        href="https://www.instagram.com/it3ju5t_noah/"
+        className="book-sidebar-social"
+        aria-label="Instagram"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="/noah_s_portfolio/images/IGLogo.svg"
+          alt="Instagram"
+        />
+      </a>
+
+      <a
+        href="mailto:luutmtam@gmail.com"
+        className="book-sidebar-social"
+        aria-label="Email"
+      >
+        <img
+          src="/noah_s_portfolio/images/GmailLogo.svg"
+          alt="Gmail"
+        />
+      </a>
+
+      <a
+        href="https://www.tiktok.com/@noah.overthinker?lang=en"
+        className="book-sidebar-social"
+        aria-label="TikTok"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="/noah_s_portfolio/images/TiktokLogo.svg"
+          alt="TikTok"
+        />
+      </a>
+
+      <a
+        href="https://www.facebook.com/just.lemme.name.myself.noah/"
+        className="book-sidebar-social"
+        aria-label="Facebook"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="/noah_s_portfolio/images/FbLogo.svg"
+          alt="Facebook"
+        />
+      </a>
+    </div>
+  </div>
+);
+
 const exploreItems = [
   {
     label: "Wandering idea",
@@ -283,7 +352,7 @@ export default function BookofHistory1() {
       {/* Footer */}
       <footer className="book-footer">
         <p>NOAH&rsquo;s PORTFOLIO</p>
-        <span>latest update: Aug 2026</span>
+        <span>latest update: Sep 2026</span>
       </footer>
 
       {/* Sidebar */}
@@ -410,9 +479,7 @@ export default function BookofHistory1() {
     ))}
   </div>
 
-  <div className="book-sidebar-logo">
-    NOAH&rsquo;s PORTFOLIO
-  </div>
+  <SocialIcons />
 </aside>
   </div>
 )}
