@@ -95,6 +95,7 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
   const [activeFilter, setActiveFilter] = useState<Category>("All");
   const [expertiseOpen, setExpertiseOpen] = useState(false);
   const [comingSoonOpen, setComingSoonOpen] = useState(false);
+  const [cardsScrolled, setCardsScrolled] = useState(false);
 
   useEffect(() => {
     if (!comingSoonOpen) return;
@@ -157,8 +158,11 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
             ))}
           </nav>
 
-          <div className="history-3-layout">
-            <div className="history-3-card-grid">
+          <div className={`history-3-layout ${cardsScrolled ? "cards-scrolled" : ""}`}>
+            <div
+              className="history-3-card-grid"
+              onScroll={(event) => setCardsScrolled(event.currentTarget.scrollTop > 2)}
+            >
               {visibleStories.map((story) => (
                 <article className={`history-3-card ${story.color}`} key={story.cardNumber} data-card-number={story.cardNumber}>
                   <div className="history-3-card-meta"><span><b aria-hidden="true"><img src={storyIconMap[story.category]} alt="" width={24} height={24} /></b>{story.category}</span><span>{story.organization}</span></div>

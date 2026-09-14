@@ -1,4 +1,12 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+
+const BOOK_PROGRESS_STORAGE_KEY = "noah-book-history-progress";
+
+const readStoredBookProgress = () => {
+  const stored = Number(window.sessionStorage.getItem(BOOK_PROGRESS_STORAGE_KEY));
+  return Number.isFinite(stored) ? Math.max(0, Math.min(1, stored)) : 0;
+};
+
 const InfoIcon = () => (
   <svg
     width="24"
@@ -221,14 +229,19 @@ export default function BookofHistory1({
   const lastHoverCountAtRef = useRef(0);
   const idleTimerRef = useRef<number | null>(null);
   const reverseAnimationRef = useRef<number | null>(null);
-  const page3ProgressRef = useRef(0);
-  const [page3Progress, setPage3Progress] = useState(0);
+  const initialBookProgress = readStoredBookProgress();
+  const page3ProgressRef = useRef(initialBookProgress);
+  const [page3Progress, setPage3Progress] = useState(initialBookProgress);
 
   const commitPage3Progress = (nextProgress: number) => {
     const clamped = Math.max(0, Math.min(1, nextProgress));
 
     page3ProgressRef.current = clamped;
     setPage3Progress(clamped);
+    window.sessionStorage.setItem(
+      BOOK_PROGRESS_STORAGE_KEY,
+      String(clamped),
+    );
 
     window.dispatchEvent(
       new CustomEvent("book-history-2-progress", {

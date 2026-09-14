@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 
+const BOOK_PROGRESS_STORAGE_KEY = "noah-book-history-progress";
+
+const readStoredBookProgress = () => {
+  const stored = Number(window.sessionStorage.getItem(BOOK_PROGRESS_STORAGE_KEY));
+  return Number.isFinite(stored) ? Math.max(0, Math.min(1, stored)) : 0;
+};
+
 const bubbles = [
   { label: "Product Marketing", level: 1, color: "mint" },
   { label: "Marketing Planner", level: 1, color: "pink" },
@@ -27,7 +34,7 @@ type BookofHistory2Props = {
 };
 
 export default function BookofHistory2({ language: _language, setLanguage: _setLanguage }: BookofHistory2Props) {
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(readStoredBookProgress);
   const [frameStyle, setFrameStyle] = useState<CSSProperties>({});
   const [contentStyle, setContentStyle] = useState<CSSProperties>({});
   const [quoteStyle, setQuoteStyle] = useState<CSSProperties>({});

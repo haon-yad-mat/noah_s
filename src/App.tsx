@@ -9,10 +9,20 @@ import FaceTransition from "./components/FaceTransition";
 type Language = "VN" | "EN";
 type Page = "main" | "resume";
 
+const BOOK_PROGRESS_STORAGE_KEY = "noah-book-history-progress";
+const BOOK_SCROLL_STORAGE_KEY = "noah-book-history-scroll-y";
+
+const readStoredBookProgress = () => {
+  const stored = Number(window.sessionStorage.getItem(BOOK_PROGRESS_STORAGE_KEY));
+  return Number.isFinite(stored) ? Math.max(0, Math.min(1, stored)) : 0;
+};
+
 export default function App() {
   const [language, setLanguage] = useState<Language>("EN");
   const [page, setPage] = useState<Page>("main");
-  const [bookHistory3Ready, setBookHistory3Ready] = useState(false);
+  const [bookHistory3Ready, setBookHistory3Ready] = useState(
+    () => readStoredBookProgress() >= 0.999,
+  );
   const previousScrollY = useRef(0);
 
   useEffect(() => {
@@ -33,6 +43,33 @@ export default function App() {
         "book-history-2-progress",
         handleBookHistoryProgress,
       );
+    };
+  }, []);
+
+  useEffect(() => {
+    const restoreScrollY = Number(
+      window.sessionStorage.getItem(BOOK_SCROLL_STORAGE_KEY),
+    );
+
+    if (readStoredBookProgress() > 0 && Number.isFinite(restoreScrollY)) {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => window.scrollTo(0, restoreScrollY));
+      });
+    }
+
+    const rememberPosition = () => {
+      window.sessionStorage.setItem(
+        BOOK_SCROLL_STORAGE_KEY,
+        String(window.scrollY),
+      );
+    };
+
+    window.addEventListener("pagehide", rememberPosition);
+    window.addEventListener("beforeunload", rememberPosition);
+
+    return () => {
+      window.removeEventListener("pagehide", rememberPosition);
+      window.removeEventListener("beforeunload", rememberPosition);
     };
   }, []);
 
