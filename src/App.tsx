@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LandingPage from "./pages/LandingPage";
 import BookofHistory1 from "./pages/BookofHistory1";
 import BookofHistory2 from "./pages/BookofHistory2";
+import BookofHistory3 from "./pages/BookofHistory3";
 import Resume from "./pages/Resume";
 import FaceTransition from "./components/FaceTransition";
 
@@ -11,7 +12,29 @@ type Page = "main" | "resume";
 export default function App() {
   const [language, setLanguage] = useState<Language>("EN");
   const [page, setPage] = useState<Page>("main");
+  const [bookHistory3Ready, setBookHistory3Ready] = useState(false);
   const previousScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleBookHistoryProgress = (event: Event) => {
+      const customEvent = event as CustomEvent<{ progress: number }>;
+      const progress = customEvent.detail?.progress ?? 0;
+
+      setBookHistory3Ready(progress >= 0.999);
+    };
+
+    window.addEventListener(
+      "book-history-2-progress",
+      handleBookHistoryProgress,
+    );
+
+    return () => {
+      window.removeEventListener(
+        "book-history-2-progress",
+        handleBookHistoryProgress,
+      );
+    };
+  }, []);
 
   const openResume = () => {
     previousScrollY.current = window.scrollY;
@@ -46,6 +69,13 @@ export default function App() {
         onOpenResume={openResume}
       />
       <BookofHistory2 language={language} setLanguage={setLanguage} />
+      {bookHistory3Ready && (
+        <BookofHistory3
+          language={language}
+          setLanguage={setLanguage}
+          onOpenResume={openResume}
+        />
+      )}
       <FaceTransition />
     </>
   );

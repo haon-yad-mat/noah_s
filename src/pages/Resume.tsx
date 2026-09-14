@@ -184,9 +184,13 @@ export default function Resume({
                 onOpenBookOfHistory();
               }}
             >
-              ↗ <span>{language === "VN" ? "Xem Portfolio" : "Check My Portfolio"}</span>
+              <img src="/noah_s_portfolio/images/arrow-up-right.svg" alt="" aria-hidden="true" />
+              <span>{language === "VN" ? "Xem Portfolio" : "Check My Portfolio"}</span>
             </a>
-            <a href="mailto:luutmtam@gmail.com">↗ <span>{language === "VN" ? "Liên hệ để nhận CV chi tiết" : "Contact for more detailed CV"}</span></a>
+            <a href="mailto:luutmtam@gmail.com">
+              <img src="/noah_s_portfolio/images/arrow-up-right.svg" alt="" aria-hidden="true" />
+              <span>{language === "VN" ? "Liên hệ để nhận CV chi tiết" : "Contact for more detailed CV"}</span>
+            </a>
           </div>
         </main>
       </div>
