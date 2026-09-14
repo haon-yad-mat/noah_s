@@ -23,7 +23,7 @@ const InfoIcon = () => (
   </svg>
 );
 
-const SocialIcons = () => (
+export const SocialIcons = () => (
   <div className="book-sidebar-social-area">
     <div className="book-sidebar-social-row">
       <a href="https://www.linkedin.com/in/this-is-noah" className="book-sidebar-social" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
@@ -49,7 +49,7 @@ const SocialIcons = () => (
   </div>
 );
 
-const exploreItems = [
+export const exploreItems = [
   {
     label: "Wandering idea",
     info: false,
@@ -113,7 +113,7 @@ const exploreItems = [
   },
 ];
 
-const quickStopItems = [
+export const quickStopItems = [
   {
     label: "Anything new?",
     icon: (
@@ -197,11 +197,13 @@ type Language = "VN" | "EN";
 type BookofHistory1Props = {
   language: Language;
   setLanguage: (value: Language) => void;
+  onOpenResume: () => void;
 };
 
 export default function BookofHistory1({
   language,
   setLanguage,
+  onOpenResume,
 }: BookofHistory1Props) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -659,7 +661,12 @@ export default function BookofHistory1({
         className="book-sidebar-nav-row"
         type="button"
         onClick={() => {
-          setComingSoonOpen(true);
+          if (item.label === "Resume/ Porfolio") {
+            setMenuOpen(false);
+            onOpenResume();
+          } else {
+            setComingSoonOpen(true);
+          }
         }}
       >
         <span className="book-sidebar-nav-icon">
