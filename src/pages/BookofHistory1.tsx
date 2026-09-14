@@ -216,10 +216,7 @@ export default function BookofHistory1({
   const [comingSoonOpen, setComingSoonOpen] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
   const page2VisibleRef = useRef(false);
-  const page2EntryScrollYRef = useRef<number | null>(null);
-  const scrollCountRef = useRef(0);
   const hoverCountRef = useRef(0);
-  const lastScrollYRef = useRef<number | null>(null);
   const lastHoverXRef = useRef<number | null>(null);
   const lastHoverCountAtRef = useRef(0);
   const idleTimerRef = useRef<number | null>(null);
@@ -264,25 +261,14 @@ export default function BookofHistory1({
       if (page2VisibleRef.current && page3ProgressRef.current < 1) {
         commitPage3Progress(1);
       }
-    }, 10000);
-  };
-
-  const registerScrollAction = () => {
-    if (page3ProgressRef.current >= 1) return;
-
-    scrollCountRef.current = Math.min(5, scrollCountRef.current + 1);
-    commitPage3Progress(scrollCountRef.current / 5);
-
-    if (page2VisibleRef.current) {
-      scheduleIdleTransition();
-    }
+    }, 3000);
   };
 
   const registerHoverAction = () => {
     if (page3ProgressRef.current >= 1) return;
 
-    hoverCountRef.current = Math.min(5, hoverCountRef.current + 1);
-    commitPage3Progress(hoverCountRef.current / 5);
+    hoverCountRef.current = Math.min(3, hoverCountRef.current + 1);
+    commitPage3Progress(hoverCountRef.current / 3);
 
     if (page2VisibleRef.current) {
       scheduleIdleTransition();
@@ -294,6 +280,8 @@ export default function BookofHistory1({
 
     lastHoverXRef.current = event.clientX;
     lastHoverCountAtRef.current = performance.now();
+
+    // Entering the frame still counts as one hover action.
     registerHoverAction();
   };
 
@@ -310,7 +298,15 @@ export default function BookofHistory1({
     const distance = Math.abs(event.clientX - previousX);
     const now = performance.now();
 
-    if (distance >= 70 && now - lastHoverCountAtRef.current >= 180) {
+    /*
+     * A meaningful sweep inside the frame counts too.
+     * 70px prevents tiny mouse jitter from instantly triggering all 3 steps.
+     * 180ms prevents one fast browser mousemove burst from double-counting.
+     */
+    if (
+      distance >= 70 &&
+      now - lastHoverCountAtRef.current >= 180
+    ) {
       lastHoverXRef.current = event.clientX;
       lastHoverCountAtRef.current = now;
       registerHoverAction();
@@ -327,17 +323,9 @@ export default function BookofHistory1({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const isVisible =
-          entry.isIntersecting && entry.intersectionRatio >= 0.65;
-
-        if (isVisible && !page2VisibleRef.current) {
-          page2EntryScrollYRef.current = window.scrollY;
-          lastScrollYRef.current = window.scrollY;
-          scrollCountRef.current = 0;
-        }
-
         // Consider Page 2 "active" only when most of it is visible.
-        page2VisibleRef.current = isVisible;
+        page2VisibleRef.current =
+          entry.isIntersecting && entry.intersectionRatio >= 0.65;
 
         if (page2VisibleRef.current && page3ProgressRef.current < 1) {
           scheduleIdleTransition();
@@ -367,35 +355,6 @@ export default function BookofHistory1({
       ) {
         scheduleIdleTransition();
       }
-    };
-
-    const handleScrollProgress = () => {
-      const currentY = window.scrollY;
-      const previousY = lastScrollYRef.current;
-
-      if (previousY === null) {
-        lastScrollYRef.current = currentY;
-        return;
-      }
-
-      const deltaY = currentY - previousY;
-      lastScrollYRef.current = currentY;
-
-      if (deltaY <= 0 || !page2VisibleRef.current) return;
-
-      const entryY = page2EntryScrollYRef.current ?? currentY;
-      if (currentY - entryY < 120) return;
-      if (Math.abs(deltaY) < 70) return;
-
-      registerScrollAction();
-    };
-
-    const handleWheelProgress = (event: WheelEvent) => {
-      if (event.deltaY <= 0 || !page2VisibleRef.current) return;
-      if (page3ProgressRef.current >= 1) return;
-      if (Math.abs(event.deltaY) < 50) return;
-
-      registerScrollAction();
     };
 
     const handleReverse = () => {
@@ -429,9 +388,7 @@ export default function BookofHistory1({
         }
 
         reverseAnimationRef.current = null;
-        scrollCountRef.current = 0;
         hoverCountRef.current = 0;
-        lastScrollYRef.current = null;
         lastHoverXRef.current = null;
         lastHoverCountAtRef.current = 0;
         commitPage3Progress(0);
@@ -448,8 +405,7 @@ export default function BookofHistory1({
     window.addEventListener("mousemove", handleActivity);
     window.addEventListener("mousedown", handleActivity);
     window.addEventListener("keydown", handleActivity);
-    window.addEventListener("scroll", handleScrollProgress, { passive: true });
-    window.addEventListener("wheel", handleWheelProgress, { passive: true });
+    window.addEventListener("wheel", handleActivity, { passive: true });
     window.addEventListener("touchstart", handleActivity, { passive: true });
     window.addEventListener("book-history-2-reverse", handleReverse);
 
@@ -463,8 +419,7 @@ export default function BookofHistory1({
       window.removeEventListener("mousemove", handleActivity);
       window.removeEventListener("mousedown", handleActivity);
       window.removeEventListener("keydown", handleActivity);
-      window.removeEventListener("scroll", handleScrollProgress);
-      window.removeEventListener("wheel", handleWheelProgress);
+      window.removeEventListener("wheel", handleActivity);
       window.removeEventListener("touchstart", handleActivity);
       window.removeEventListener("book-history-2-reverse", handleReverse);
     };
