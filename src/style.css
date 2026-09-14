@@ -2774,14 +2774,33 @@ body.page3-transition-active {
     overflow: hidden;
   }
 
+  .book-history-3-shell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .history-3-header {
+    flex: 0 0 96px;
+  }
+
   .history-3-main {
-    height: calc(100vh - 96px);
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
     padding-bottom: 0;
     overflow: visible;
   }
 
+  .history-3-filters {
+    flex: 0 0 auto;
+  }
+
   .history-3-layout {
-    height: calc(100vh - 200px);
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
     overflow: visible;
   }
 
