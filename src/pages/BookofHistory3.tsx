@@ -50,6 +50,21 @@ const achievements = [
   ["📱", "Built 10 Social Media Accounts"],
 ];
 
+const expertiseAreas = [
+  "Marketing",
+  "Branding",
+  "Content Creation",
+  "Creative",
+  "Social Media Strategy",
+  "Product Development",
+  "Business Analyst",
+  "Project Management",
+  "Executive Assistance / Operations",
+  "UI/UX Design",
+  "Quality Assurance (QA / Testing)",
+  "Client & Stakeholder Management",
+];
+
 const toolkit = [
   "Canva",
   "ChatGPT",
@@ -164,7 +179,13 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
                 <span>areas of expertise</span>
                 <img src="/noah_s_portfolio/images/down-arrow.svg" alt="" aria-hidden="true" className="history-3-chevron" />
               </button>
-              {expertiseOpen && <div className="history-3-expertise-list">Product development · Business analysis · Project coordination · Marketing strategy · Branding · Growth · UI/UX · CRM · Research · Content · Operations · Leadership</div>}
+              {expertiseOpen && (
+                <div className="history-3-expertise-list">
+                  {expertiseAreas.map((area, index) => (
+                    <span key={area}>({index + 1}) {area}</span>
+                  ))}
+                </div>
+              )}
 
               <button className="history-3-summary-link" type="button" onClick={onOpenResume}>
                 <span>CLICK TO SEE MY RESUME</span>

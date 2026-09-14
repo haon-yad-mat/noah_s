@@ -2330,7 +2330,15 @@ body.page3-transition-active {
   transition:
     padding 0.32s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.24s ease,
-    color 0.24s ease;
+    color 0.24s ease,
+    box-shadow 0.24s ease;
+}
+
+.history-3-filters button:not(.active):hover {
+  background: #F3EEFF;
+  box-shadow:
+    inset 0 1px 4px 0 rgba(255, 255, 255, 0.72),
+    0 4px 16px 0 rgba(0, 0, 0, 0.32);
 }
 
 .history-3-filters button.active {
@@ -2395,6 +2403,20 @@ body.page3-transition-active {
   padding: 16px 24px;
   border-radius: 24px;
   color: #000;
+  transition: box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.history-3-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 10px 4px rgba(0, 0, 0, 0.15),
+    0 4px 6px 0 rgba(0, 0, 0, 0.3);
+}
+
+.history-3-card:hover .history-3-card-subtitle {
+  text-shadow:
+    0 4px 8px #FFFFFF,
+    0 1px 3px #FFFFFF;
 }
 
 .history-3-card.mint { background: #67DFC0; }
@@ -2551,12 +2573,25 @@ body.page3-transition-active {
 
 .history-3-expertise-button { cursor: pointer; }
 
+.history-3-expertise-button[aria-expanded="true"] {
+  border-radius: 24px 24px 0 0;
+  box-shadow: none;
+}
+
 .history-3-expertise-list {
-  margin-top: -8px;
-  padding: 12px 16px;
-  border-radius: 16px;
-  background: rgba(253, 252, 255, 0.72);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: -16px;
+  padding: 8px 24px 16px;
+  border-radius: 0 0 24px 24px;
+  background: #FDFCFF;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   font: 400 13px/20px Inter, sans-serif;
+}
+
+.history-3-expertise-list span {
+  display: block;
 }
 
 .history-3-summary-link {
@@ -2572,6 +2607,12 @@ body.page3-transition-active {
   letter-spacing: 0.005em;
   text-align: left;
   cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.history-3-summary-link:hover,
+.history-3-summary-section h3:hover {
+  color: #4D4FB6;
 }
 
 .history-3-summary-section h3 {
@@ -2581,6 +2622,7 @@ body.page3-transition-active {
   color: #3A2F47;
   font: 500 13px/20px Inter, sans-serif;
   letter-spacing: 0.005em;
+  transition: color 0.2s ease;
 }
 
 .history-3-summary-section ul {
@@ -2651,6 +2693,15 @@ body.page3-transition-active {
   width: 20px;
   height: 20px;
   flex: 0 0 20px;
+}
+
+.history-3-arrow {
+  transition: filter 0.2s ease;
+}
+
+.history-3-summary-link:hover .history-3-arrow,
+.history-3-summary-section h3:hover .history-3-arrow {
+  filter: invert(31%) sepia(27%) saturate(1927%) hue-rotate(201deg) brightness(88%) contrast(86%);
 }
 
 .history-3-chevron { transition: transform 0.2s ease; }
