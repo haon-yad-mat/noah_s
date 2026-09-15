@@ -172,7 +172,7 @@ export default function BookofHistory2({ language: _language, setLanguage: _setL
 
       {mounted && (
         <>
-          <div className="book-history-2-morph" style={frameStyle}><img className="book-history-2-morph-portrait" src="/noah_s_portfolio/images/portrait1.svg" alt="" /></div>
+          <div className="book-history-2-morph" style={frameStyle}><img className="book-history-2-morph-portrait" src="/noah_s/images/portrait1.svg" alt="" /></div>
           <div className="book-history-2-outgoing-quote" style={quoteStyle}>
             <span className="book-history-2-outgoing-line outgoing-top"><span>Actions</span> speak</span>
             <span className="book-history-2-outgoing-line outgoing-bottom">louder than words</span>

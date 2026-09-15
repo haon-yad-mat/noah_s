@@ -28,7 +28,7 @@ export default function LandingPage({ language, setLanguage }: LandingPageProps)
         </div>
 
         <div className="face-container">
-          <img src="/noah_s_portfolio/images/mặt.svg" alt="mặt" />
+          <img src="/noah_s/images/mặt.svg" alt="mặt" />
 
           <span className="eye-scroll-indicator eye-scroll-indicator-left">
             scroll

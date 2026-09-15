@@ -13,19 +13,19 @@ type BookofHistory3Props = {
 const filters: Category[] = ["All", "Academic", "Career", "Activities", "Other"];
 
 const filterIconMap: Record<Category, string> = {
-  All: "/noah_s_portfolio/images/BOH-all-icon.svg",
-  Academic: "/noah_s_portfolio/images/BOH-academic-icon.svg",
-  Career: "/noah_s_portfolio/images/BOH-career-icon.svg",
-  Activities: "/noah_s_portfolio/images/BOH-activities-icon.svg",
-  Other: "/noah_s_portfolio/images/BOH-other-icon.svg",
+  All: "/noah_s/images/BOH-all-icon.svg",
+  Academic: "/noah_s/images/BOH-academic-icon.svg",
+  Career: "/noah_s/images/BOH-career-icon.svg",
+  Activities: "/noah_s/images/BOH-activities-icon.svg",
+  Other: "/noah_s/images/BOH-other-icon.svg",
 };
 
 const storyIconMap: Record<Category, string> = {
-  All: "/noah_s_portfolio/images/BOH-all-icon.svg",
-  Academic: "/noah_s_portfolio/images/BOH-academic-icon.svg",
-  Career: "/noah_s_portfolio/images/BOH-career-icon.svg",
-  Activities: "/noah_s_portfolio/images/BOH-activities-icon.svg",
-  Other: "/noah_s_portfolio/images/BOH-other-icon.svg",
+  All: "/noah_s/images/BOH-all-icon.svg",
+  Academic: "/noah_s/images/BOH-academic-icon.svg",
+  Career: "/noah_s/images/BOH-career-icon.svg",
+  Activities: "/noah_s/images/BOH-activities-icon.svg",
+  Other: "/noah_s/images/BOH-other-icon.svg",
 };
 
 const stories = [
@@ -181,7 +181,7 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
               <button className="history-3-stat history-3-expertise-button" type="button" onClick={() => setExpertiseOpen((open) => !open)} aria-expanded={expertiseOpen}>
                 <strong>12</strong>
                 <span>areas of expertise</span>
-                <img src="/noah_s_portfolio/images/down-arrow.svg" alt="" aria-hidden="true" className="history-3-chevron" />
+                <img src="/noah_s/images/down-arrow.svg" alt="" aria-hidden="true" className="history-3-chevron" />
               </button>
               {expertiseOpen && (
                 <div className="history-3-expertise-list">
@@ -193,13 +193,13 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
 
               <button className="history-3-summary-link" type="button" onClick={onOpenResume}>
                 <span>CLICK TO SEE MY RESUME</span>
-                <img src="/noah_s_portfolio/images/arrow-up-right.svg" alt="" aria-hidden="true" className="history-3-arrow" />
+                <img src="/noah_s/images/arrow-up-right.svg" alt="" aria-hidden="true" className="history-3-arrow" />
               </button>
 
               <section className="history-3-summary-section">
                 <h3>
                   <span>ACHIEVEMENTS</span>
-                  <img src="/noah_s_portfolio/images/arrow-up-right.svg" alt="" aria-hidden="true" className="history-3-arrow" />
+                  <img src="/noah_s/images/arrow-up-right.svg" alt="" aria-hidden="true" className="history-3-arrow" />
                 </h3>
                 <ul>{achievements.map(([icon, text]) => <li key={text}><span aria-hidden="true">{icon}</span><span>{text}</span></li>)}</ul>
               </section>
@@ -207,14 +207,14 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
               <section className="history-3-summary-section">
                 <h3>
                   <span>TOOLKIT</span>
-                  <img src="/noah_s_portfolio/images/arrow-up-right.svg" alt="" aria-hidden="true" className="history-3-arrow" />
+                  <img src="/noah_s/images/arrow-up-right.svg" alt="" aria-hidden="true" className="history-3-arrow" />
                 </h3>
                 <div className="history-3-toolkit">
                   {toolkit.map((tool) => (
                     <img
                       key={tool}
                       className="history-3-tool-logo"
-                      src={`/noah_s_portfolio/images/${tool}.svg`}
+                      src={`/noah_s/images/${tool}.svg`}
                       alt={tool}
                       title={tool}
                     />
@@ -225,7 +225,7 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
               <section className="history-3-summary-section history-3-testimonials">
                 <h3>
                   <span>WHAT PEOPLE SAY</span>
-                  <img src="/noah_s_portfolio/images/arrow-up-right.svg" alt="" aria-hidden="true" className="history-3-arrow" />
+                  <img src="/noah_s/images/arrow-up-right.svg" alt="" aria-hidden="true" className="history-3-arrow" />
                 </h3>
                 <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel odio urna. Sed iaculis, ex in vulputate gravida, urna urna lobortis leo.”<cite>Somebody’s Name</cite></blockquote>
                 <blockquote>“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vel odio urna. Sed iaculis, ex in vulputate gravida, urna urna lobortis leo.”<cite>Somebody’s Name</cite></blockquote>

@@ -200,7 +200,7 @@ export default function FaceTransition() {
     <div ref={rootRef} className="face-transition" aria-hidden="true">
       <img
         ref={sourceFaceRef}
-        src="/noah_s_portfolio/images/mặt.svg"
+        src="/noah_s/images/mặt.svg"
         alt=""
         style={{
           position: "absolute",
@@ -216,7 +216,7 @@ export default function FaceTransition() {
 
       <img
         ref={targetPortraitRef}
-        src="/noah_s_portfolio/images/portrait1.svg"
+        src="/noah_s/images/portrait1.svg"
         alt=""
         style={{
           position: "absolute",

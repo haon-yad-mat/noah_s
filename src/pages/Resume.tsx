@@ -122,7 +122,7 @@ export default function Resume({
                 <h2>EDUCATION</h2>
                 <div className="resume-glass resume-small-card">
                   <div className="resume-education-title">
-                    <img src="/noah_s_portfolio/images/bachelorIcon.svg" alt="Bachelor" aria-hidden="true" className="resume-education-icon" />
+                    <img src="/noah_s/images/bachelorIcon.svg" alt="Bachelor" aria-hidden="true" className="resume-education-icon" />
                     <h3>Bachelor @NEU</h3>
                   </div>
                   <p className="resume-accent">Marketing Management</p>
@@ -133,9 +133,9 @@ export default function Resume({
               <section className="resume-section">
                 <h2>LANGUAGES</h2>
                 <div className="resume-glass resume-language-card" aria-label="Vietnamese, English and Chinese">
-                  <img src="/noah_s_portfolio/images/VNflag.svg" alt="Vietnamese" aria-label="Vietnamese" />
-                  <img src="/noah_s_portfolio/images/USflag.svg" alt="English" aria-label="English" />
-                  <img src="/noah_s_portfolio/images/CNflag.svg" alt="Chinese" aria-label="Chinese" />
+                  <img src="/noah_s/images/VNflag.svg" alt="Vietnamese" aria-label="Vietnamese" />
+                  <img src="/noah_s/images/USflag.svg" alt="English" aria-label="English" />
+                  <img src="/noah_s/images/CNflag.svg" alt="Chinese" aria-label="Chinese" />
                 </div>
               </section>
 
@@ -184,11 +184,11 @@ export default function Resume({
                 onOpenBookOfHistory();
               }}
             >
-              <img src="/noah_s_portfolio/images/arrow-up-right.svg" alt="" aria-hidden="true" />
+              <img src="/noah_s/images/arrow-up-right.svg" alt="" aria-hidden="true" />
               <span>{language === "VN" ? "Xem Portfolio" : "Check My Portfolio"}</span>
             </a>
             <a href="mailto:luutmtam@gmail.com">
-              <img src="/noah_s_portfolio/images/arrow-up-right.svg" alt="" aria-hidden="true" />
+              <img src="/noah_s/images/arrow-up-right.svg" alt="" aria-hidden="true" />
               <span>{language === "VN" ? "Liên hệ để nhận CV chi tiết" : "Contact for more detailed CV"}</span>
             </a>
           </div>
