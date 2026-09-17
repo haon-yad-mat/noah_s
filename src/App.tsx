@@ -13,6 +13,17 @@ type Page = "main" | "resume";
 const BOOK_PROGRESS_STORAGE_KEY = "noah-book-history-progress";
 const BOOK_SCROLL_STORAGE_KEY = "noah-book-history-scroll-y";
 const OPEN_BOOK_FROM_MENU_KEY = "noah-open-book-from-start-menu";
+const RESTORE_PORTFOLIO_ROUTE_KEY = "noah-restore-portfolio-route";
+
+// GitHub Pages serves public/404.html for a direct visit to /portfolio.
+// That page redirects to the site root and leaves this one-time marker.
+if (
+  window.location.pathname === "/noah_s/" &&
+  window.sessionStorage.getItem(RESTORE_PORTFOLIO_ROUTE_KEY) === "1"
+) {
+  window.sessionStorage.removeItem(RESTORE_PORTFOLIO_ROUTE_KEY);
+  window.history.replaceState(window.history.state, "", "/noah_s/portfolio");
+}
 
 const readStoredBookProgress = () => {
   const stored = Number(window.sessionStorage.getItem(BOOK_PROGRESS_STORAGE_KEY));
@@ -22,15 +33,17 @@ const readStoredBookProgress = () => {
 function MainSiteFlow({
   language,
   setLanguage,
+  onOpenHistory,
 }: {
   language: Language;
   setLanguage: (value: Language) => void;
+  onOpenHistory: () => void;
 }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const transitionLockRef = useRef(0);
   const touchStartYRef = useRef<number | null>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [musicActive, setMusicActive] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(() => window.history.state?.mainPage === "start-menu");
+  const [musicActive, setMusicActive] = useState(() => window.history.state?.mainPage === "start-menu");
 
   useEffect(() => {
     document.body.classList.add("main-site-flow-active");
@@ -113,13 +126,6 @@ function MainSiteFlow({
     };
   }, [menuOpen]);
 
-  const openHistory = () => {
-    window.sessionStorage.setItem(BOOK_PROGRESS_STORAGE_KEY, "0");
-    window.sessionStorage.setItem(BOOK_SCROLL_STORAGE_KEY, "0");
-    window.sessionStorage.setItem(OPEN_BOOK_FROM_MENU_KEY, "1");
-    window.location.assign("/noah_s/portfolio");
-  };
-
   return (
     <div ref={stageRef} className={`main-site-flow ${menuOpen ? "is-start-menu" : ""}`}>
       <LandingPage language={language} setLanguage={setLanguage} />
@@ -127,20 +133,31 @@ function MainSiteFlow({
         language={language}
         setLanguage={setLanguage}
         active={musicActive}
-        onOpenHistory={openHistory}
+        onOpenHistory={onOpenHistory}
       />
     </div>
   );
 }
 
 export default function App() {
-  const isPortfolioRoute = /\/portfolio\/?$/.test(window.location.pathname);
+  const [isPortfolioRoute, setIsPortfolioRoute] = useState(
+    () => /\/portfolio\/?$/.test(window.location.pathname),
+  );
   const [language, setLanguage] = useState<Language>("EN");
   const [page, setPage] = useState<Page>("main");
   const [bookHistory3Ready, setBookHistory3Ready] = useState(
     () => readStoredBookProgress() >= 0.999,
   );
   const previousScrollY = useRef(0);
+
+  useEffect(() => {
+    const syncRoute = () => {
+      setPage("main");
+      setIsPortfolioRoute(/\/portfolio\/?$/.test(window.location.pathname));
+    };
+    window.addEventListener("popstate", syncRoute);
+    return () => window.removeEventListener("popstate", syncRoute);
+  }, []);
 
   useLayoutEffect(() => {
     if (!isPortfolioRoute || window.sessionStorage.getItem(OPEN_BOOK_FROM_MENU_KEY) !== "1") return;
@@ -170,6 +187,17 @@ export default function App() {
     };
   }, []);
 
+  const enterBookFromMenu = () => {
+    window.sessionStorage.setItem(BOOK_PROGRESS_STORAGE_KEY, "0");
+    window.sessionStorage.setItem(BOOK_SCROLL_STORAGE_KEY, "0");
+    window.sessionStorage.setItem(OPEN_BOOK_FROM_MENU_KEY, "1");
+    window.history.replaceState({ ...window.history.state, mainPage: "start-menu" }, "", window.location.href);
+    window.history.pushState({ page: "portfolio" }, "", "/noah_s/portfolio");
+    document.body.classList.remove("main-site-flow-active");
+    setBookHistory3Ready(false);
+    setIsPortfolioRoute(true);
+  };
+
   useEffect(() => {
     if (!isPortfolioRoute) return;
 
@@ -197,7 +225,7 @@ export default function App() {
       window.removeEventListener("pagehide", rememberPosition);
       window.removeEventListener("beforeunload", rememberPosition);
     };
-  }, []);
+  }, [isPortfolioRoute]);
 
   const openResume = () => {
     previousScrollY.current = window.scrollY;
@@ -225,7 +253,7 @@ export default function App() {
 
   if (!isPortfolioRoute) {
     return (
-      <MainSiteFlow language={language} setLanguage={setLanguage} />
+      <MainSiteFlow language={language} setLanguage={setLanguage} onOpenHistory={enterBookFromMenu} />
     );
   }
 

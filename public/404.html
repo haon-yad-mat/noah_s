@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Noah's portfolio</title>
+    <script>
+      if (/^\/noah_s\/portfolio\/?$/.test(window.location.pathname)) {
+        window.sessionStorage.setItem("noah-restore-portfolio-route", "1");
+        window.location.replace("/noah_s/");
+      }
+    </script>
+  </head>
+  <body>
+    <p>Page not found. <a href="/noah_s/">Return to Noah's site</a>.</p>
+  </body>
+</html>
