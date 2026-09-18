@@ -199,7 +199,7 @@ function DateFooter({ kind, onBackToMenu, onOpenHistory }: Pick<Props, "kind" | 
   return <footer className={`date-footer ${kind}`}>
     <nav className="date-footer-links" aria-label="More from Noah">
       <button type="button" onClick={onBackToMenu}>Back to Menu ↗</button>
-      <button type="button" onClick={() => setComingSoon(true)}>{kind === "coffee" ? "Want to go moonwatch with me?" : "Want a cup of coffee with me?"} ↗</button>
+      <button type="button" onClick={() => setComingSoon(true)}>{kind === "coffee" ? "Want a cup of coffee with me?" : "Want to go moonwatch with me?"} ↗</button>
       <button type="button" onClick={() => setComingSoon(true)}>Read more from me ↗</button>
       <button type="button" onClick={onOpenHistory}>A peek into my other works ↗</button>
     </nav>
