@@ -6,6 +6,7 @@ import BookofHistory3 from "./pages/BookofHistory3";
 import Resume from "./pages/Resume";
 import FaceTransition from "./components/FaceTransition";
 import StartMenu from "./pages/StartMenu";
+import DateWithMe from "./pages/DateWithMe";
 
 type Language = "VN" | "EN";
 type Page = "main" | "resume";
@@ -14,6 +15,8 @@ const BOOK_PROGRESS_STORAGE_KEY = "noah-book-history-progress";
 const BOOK_SCROLL_STORAGE_KEY = "noah-book-history-scroll-y";
 const OPEN_BOOK_FROM_MENU_KEY = "noah-open-book-from-start-menu";
 const RESTORE_PORTFOLIO_ROUTE_KEY = "noah-restore-portfolio-route";
+const RESTORE_DATE_ROUTE_KEY = "noah-restore-date-route";
+const DATE_PATH = "/noah_s/datewithnoah";
 
 // GitHub Pages serves public/404.html for a direct visit to /portfolio.
 // That page redirects to the site root and leaves this one-time marker.
@@ -23,6 +26,13 @@ if (
 ) {
   window.sessionStorage.removeItem(RESTORE_PORTFOLIO_ROUTE_KEY);
   window.history.replaceState(window.history.state, "", "/noah_s/portfolio");
+}
+if (window.location.pathname === "/noah_s/") {
+  const dateRoute = window.sessionStorage.getItem(RESTORE_DATE_ROUTE_KEY);
+  if (dateRoute === "coffee" || dateRoute === "moonwatch") {
+    window.sessionStorage.removeItem(RESTORE_DATE_ROUTE_KEY);
+    window.history.replaceState(window.history.state, "", DATE_PATH + (dateRoute === "moonwatch" ? "?date=moonwatch" : ""));
+  }
 }
 
 const readStoredBookProgress = () => {
@@ -34,10 +44,12 @@ function MainSiteFlow({
   language,
   setLanguage,
   onOpenHistory,
+  onOpenDate,
 }: {
   language: Language;
   setLanguage: (value: Language) => void;
   onOpenHistory: () => void;
+  onOpenDate: () => void;
 }) {
   const stageRef = useRef<HTMLDivElement>(null);
   const transitionLockRef = useRef(0);
@@ -134,6 +146,7 @@ function MainSiteFlow({
         setLanguage={setLanguage}
         active={musicActive}
         onOpenHistory={onOpenHistory}
+        onOpenDate={onOpenDate}
       />
     </div>
   );
@@ -143,6 +156,8 @@ export default function App() {
   const [isPortfolioRoute, setIsPortfolioRoute] = useState(
     () => /\/portfolio\/?$/.test(window.location.pathname),
   );
+  const [isDateRoute, setIsDateRoute] = useState(() => /\/datewithnoah\/?$/.test(window.location.pathname));
+  const [dateKind, setDateKind] = useState<"coffee" | "moonwatch">(() => new URLSearchParams(window.location.search).get("date") === "moonwatch" ? "moonwatch" : "coffee");
   const [language, setLanguage] = useState<Language>("EN");
   const [page, setPage] = useState<Page>("main");
   const [bookHistory3Ready, setBookHistory3Ready] = useState(
@@ -154,6 +169,8 @@ export default function App() {
     const syncRoute = () => {
       setPage("main");
       setIsPortfolioRoute(/\/portfolio\/?$/.test(window.location.pathname));
+      setIsDateRoute(/\/datewithnoah\/?$/.test(window.location.pathname));
+      setDateKind(new URLSearchParams(window.location.search).get("date") === "moonwatch" ? "moonwatch" : "coffee");
     };
     window.addEventListener("popstate", syncRoute);
     return () => window.removeEventListener("popstate", syncRoute);
@@ -191,11 +208,40 @@ export default function App() {
     window.sessionStorage.setItem(BOOK_PROGRESS_STORAGE_KEY, "0");
     window.sessionStorage.setItem(BOOK_SCROLL_STORAGE_KEY, "0");
     window.sessionStorage.setItem(OPEN_BOOK_FROM_MENU_KEY, "1");
-    window.history.replaceState({ ...window.history.state, mainPage: "start-menu" }, "", window.location.href);
+    if (!isDateRoute && !isPortfolioRoute) {
+      window.history.replaceState({ ...window.history.state, mainPage: "start-menu" }, "", window.location.href);
+    }
     window.history.pushState({ page: "portfolio" }, "", "/noah_s/portfolio");
     document.body.classList.remove("main-site-flow-active");
     setBookHistory3Ready(false);
     setIsPortfolioRoute(true);
+    setIsDateRoute(false);
+  };
+
+  const enterDate = () => {
+    if (!isPortfolioRoute && !isDateRoute) {
+      window.history.replaceState({ ...window.history.state, mainPage: "start-menu" }, "", window.location.href);
+    }
+    window.history.pushState({ page: "date" }, "", DATE_PATH);
+    document.body.classList.remove("main-site-flow-active");
+    setPage("main");
+    setDateKind("coffee");
+    setIsPortfolioRoute(false);
+    setIsDateRoute(true);
+    window.requestAnimationFrame(() => window.scrollTo(0, 0));
+  };
+
+  const switchDate = (kind: "coffee" | "moonwatch") => {
+    window.history.pushState({ page: "date", kind }, "", DATE_PATH + (kind === "moonwatch" ? "?date=moonwatch" : ""));
+    setDateKind(kind);
+    window.scrollTo(0, 0);
+  };
+
+  const backToMenu = () => {
+    window.history.pushState({ mainPage: "start-menu" }, "", "/noah_s/");
+    setIsPortfolioRoute(false);
+    setIsDateRoute(false);
+    setPage("main");
   };
 
   useEffect(() => {
@@ -251,9 +297,13 @@ export default function App() {
     );
   }
 
+  if (isDateRoute) {
+    return <DateWithMe kind={dateKind} onChangeKind={switchDate} onBackToMenu={backToMenu} onOpenHistory={enterBookFromMenu} language={language} setLanguage={setLanguage} />;
+  }
+
   if (!isPortfolioRoute) {
     return (
-      <MainSiteFlow language={language} setLanguage={setLanguage} onOpenHistory={enterBookFromMenu} />
+      <MainSiteFlow language={language} setLanguage={setLanguage} onOpenHistory={enterBookFromMenu} onOpenDate={enterDate} />
     );
   }
 
@@ -264,6 +314,7 @@ export default function App() {
         language={language}
         setLanguage={setLanguage}
         onOpenResume={openResume}
+        onOpenDate={enterDate}
       />
       <BookofHistory2 language={language} setLanguage={setLanguage} />
       {bookHistory3Ready && (
@@ -271,6 +322,7 @@ export default function App() {
           language={language}
           setLanguage={setLanguage}
           onOpenResume={openResume}
+          onOpenDate={enterDate}
         />
       )}
       <FaceTransition />

@@ -7,7 +7,7 @@ const readStoredBookProgress = () => {
   return Number.isFinite(stored) ? Math.max(0, Math.min(1, stored)) : 0;
 };
 
-const InfoIcon = () => (
+export const InfoIcon = () => (
   <svg
     width="24"
     height="24"
@@ -206,12 +206,14 @@ type BookofHistory1Props = {
   language: Language;
   setLanguage: (value: Language) => void;
   onOpenResume: () => void;
+  onOpenDate: () => void;
 };
 
 export default function BookofHistory1({
   language,
   setLanguage,
   onOpenResume,
+  onOpenDate,
 }: BookofHistory1Props) {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -611,6 +613,11 @@ export default function BookofHistory1({
         }`}
         type="button"
         onClick={() => {
+          if (item.label === "A date with me") {
+            setMenuOpen(false);
+            onOpenDate();
+            return;
+          }
           if (!item.active) {
             setComingSoonOpen(true);
           }

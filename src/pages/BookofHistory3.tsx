@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { SocialIcons, exploreItems, quickStopItems } from "./BookofHistory1";
+import { SocialIcons, exploreItems, quickStopItems, InfoIcon } from "./BookofHistory1";
 
 type Language = "VN" | "EN";
 type Category = "All" | "Academic" | "Career" | "Activities" | "Other";
@@ -8,6 +8,7 @@ type BookofHistory3Props = {
   language: Language;
   setLanguage: (value: Language) => void;
   onOpenResume: () => void;
+  onOpenDate: () => void;
 };
 
 const filters: Category[] = ["All", "Academic", "Career", "Activities", "Other"];
@@ -20,13 +21,7 @@ const filterIconMap: Record<Category, string> = {
   Other: "/noah_s/images/BOH-other-icon.svg",
 };
 
-const storyIconMap: Record<Category, string> = {
-  All: "/noah_s/images/BOH-all-icon.svg",
-  Academic: "/noah_s/images/BOH-academic-icon.svg",
-  Career: "/noah_s/images/BOH-career-icon.svg",
-  Activities: "/noah_s/images/BOH-activities-icon.svg",
-  Other: "/noah_s/images/BOH-other-icon.svg",
-};
+const storyIconMap: Record<Category, string> = { ...filterIconMap };
 
 const stories = [
   { cardNumber: 1, category: "Career" as Category, color: "mint", organization: "@YITEC", title: "Connecting Users, AI and Business into real Products", highlight: "5 Projects • Most Dedicated Contributor", hashtags: "#AI-Startup #Cross-functional #Product-owner #International", jobTitles: ["Business Analyst", "Executive Assistant"] },
@@ -90,7 +85,7 @@ const toolkit = [
   "Word",
 ];
 
-export default function BookofHistory3({ language, setLanguage, onOpenResume }: BookofHistory3Props) {
+export default function BookofHistory3({ language, setLanguage, onOpenResume, onOpenDate }: BookofHistory3Props) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<Category>("All");
   const [expertiseOpen, setExpertiseOpen] = useState(false);
@@ -110,6 +105,11 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
   const bookIcon = exploreItems.find((item) => item.label === "Book of history")?.icon;
 
   const handleNavigation = (label: string) => {
+    if (label === "A date with me") {
+      setMenuOpen(false);
+      onOpenDate();
+      return;
+    }
     if (label === "Resume/ Porfolio") {
       setMenuOpen(false);
       onOpenResume();
@@ -211,13 +211,7 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
                 </h3>
                 <div className="history-3-toolkit">
                   {toolkit.map((tool) => (
-                    <img
-                      key={tool}
-                      className="history-3-tool-logo"
-                      src={`/noah_s/images/${tool}.svg`}
-                      alt={tool}
-                      title={tool}
-                    />
+                    <img key={tool} className="history-3-tool-logo" src={`/noah_s/images/${tool}.svg`} alt={tool} title={tool} />
                   ))}
                 </div>
               </section>
@@ -245,7 +239,7 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume }: 
           <aside className="book-sidebar">
             <div className="book-sidebar-section">
               <div className="book-sidebar-section-title"><span>EXPLORE</span><button type="button" className="book-sidebar-close" onClick={() => setMenuOpen(false)} aria-label="Close navigation menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 7L13 12L18 17M11 7L6 12L11 17" stroke="#44418D" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button></div>
-              {exploreItems.map((item) => <button key={item.label} className={`book-sidebar-nav-row ${item.label === "Book of history" ? "active" : ""}`} type="button" onClick={() => handleNavigation(item.label)}><span className="book-sidebar-nav-icon">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span></button>)}
+              {exploreItems.map((item) => <button key={item.label} className={`book-sidebar-nav-row ${item.label === "Book of history" ? "active" : ""}`} type="button" onClick={() => handleNavigation(item.label)}><span className="book-sidebar-nav-icon">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span>{item.info && <span className="book-sidebar-info" aria-hidden="true"><InfoIcon /></span>}</button>)}
             </div>
             <div className="book-sidebar-section">
               <div className="book-sidebar-section-title">QUICK STOPS</div>

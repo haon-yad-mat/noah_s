@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { SocialIcons, exploreItems, quickStopItems } from "./BookofHistory1";
+import { SocialIcons, exploreItems, quickStopItems, InfoIcon } from "./BookofHistory1";
+
+const resumeImage = (name: string) => `/noah_s/images/${name}.svg`;
 
 type Language = "VN" | "EN";
 
@@ -87,12 +89,10 @@ export default function Resume({
             </button>
           )}
 
-          {!menuOpen && (
-            <div className="book-language" aria-label="Language selector">
-              <button type="button" className={language === "VN" ? "active" : ""} aria-pressed={language === "VN"} onClick={() => setLanguage("VN")}>VN</button>
-              <button type="button" className={language === "EN" ? "active" : ""} aria-pressed={language === "EN"} onClick={() => setLanguage("EN")}>EN</button>
-            </div>
-          )}
+          <div className="book-language" aria-label="Language selector">
+            <button type="button" className={language === "VN" ? "active" : ""} aria-pressed={language === "VN"} onClick={() => setLanguage("VN")}>VN</button>
+            <button type="button" className={language === "EN" ? "active" : ""} aria-pressed={language === "EN"} onClick={() => setLanguage("EN")}>EN</button>
+          </div>
         </header>
 
         <main className="resume-main">
@@ -121,10 +121,7 @@ export default function Resume({
               <section className="resume-section">
                 <h2>EDUCATION</h2>
                 <div className="resume-glass resume-small-card">
-                  <div className="resume-education-title">
-                    <img src="/noah_s/images/bachelorIcon.svg" alt="Bachelor" aria-hidden="true" className="resume-education-icon" />
-                    <h3>Bachelor @NEU</h3>
-                  </div>
+                  <div className="resume-education-title"><img className="resume-education-icon" src={resumeImage("bachelorIcon")} alt="" /><h3>Bachelor @NEU</h3></div>
                   <p className="resume-accent">Marketing Management</p>
                   <p><em>Graduate with Distinction</em></p>
                 </div>
@@ -133,9 +130,7 @@ export default function Resume({
               <section className="resume-section">
                 <h2>LANGUAGES</h2>
                 <div className="resume-glass resume-language-card" aria-label="Vietnamese, English and Chinese">
-                  <img src="/noah_s/images/VNflag.svg" alt="Vietnamese" aria-label="Vietnamese" />
-                  <img src="/noah_s/images/USflag.svg" alt="English" aria-label="English" />
-                  <img src="/noah_s/images/CNflag.svg" alt="Chinese" aria-label="Chinese" />
+                  <img src={resumeImage("VNflag")} alt="Vietnamese" /><img src={resumeImage("USflag")} alt="English" /><img src={resumeImage("CNflag")} alt="Chinese" />
                 </div>
               </section>
 
@@ -177,20 +172,8 @@ export default function Resume({
           </section>
 
           <div className="resume-actions">
-            <a
-              href="#portfolio"
-              onClick={(event) => {
-                event.preventDefault();
-                onOpenBookOfHistory();
-              }}
-            >
-              <img src="/noah_s/images/arrow-up-right.svg" alt="" aria-hidden="true" />
-              <span>{language === "VN" ? "Xem Portfolio" : "Check My Portfolio"}</span>
-            </a>
-            <a href="mailto:luutmtam@gmail.com">
-              <img src="/noah_s/images/arrow-up-right.svg" alt="" aria-hidden="true" />
-              <span>{language === "VN" ? "Liên hệ để nhận CV chi tiết" : "Contact for more detailed CV"}</span>
-            </a>
+            <a href="#portfolio"><img src={resumeImage("arrow-up-right")} width={20} height={20} alt="" /> <span>{language === "VN" ? "Xem Portfolio" : "Check My Portfolio"}</span></a>
+            <a href="mailto:luutmtam@gmail.com"><img src={resumeImage("arrow-up-right")} width={20} height={20} alt="" /> <span>{language === "VN" ? "Liên hệ để nhận CV chi tiết" : "Contact for more detailed CV"}</span></a>
           </div>
         </main>
       </div>
@@ -206,7 +189,7 @@ export default function Resume({
                 </button>
               </div>
               {exploreItems.map((item) => (
-                <button key={item.label} className="book-sidebar-nav-row" type="button" onClick={() => handleNavigation(item.label)}><span className="book-sidebar-nav-icon" aria-hidden="true">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span></button>
+                <button key={item.label} className="book-sidebar-nav-row" type="button" onClick={() => handleNavigation(item.label)}><span className="book-sidebar-nav-icon" aria-hidden="true">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span>{item.info && <span className="book-sidebar-info" aria-hidden="true"><InfoIcon /></span>}</button>
               ))}
             </div>
             <div className="book-sidebar-section">
@@ -215,11 +198,7 @@ export default function Resume({
                 <button key={item.label} className={`book-sidebar-nav-row ${item.label === "Resume/ Porfolio" ? "active" : ""}`} type="button" onClick={() => handleNavigation(item.label)}><span className="book-sidebar-nav-icon" aria-hidden="true">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span></button>
               ))}
             </div>
-
-            <div className="book-language resume-sidebar-language" aria-label="Language selector">
-              <button type="button" className={language === "VN" ? "active" : ""} aria-pressed={language === "VN"} onClick={() => setLanguage("VN")}>VN</button>
-              <button type="button" className={language === "EN" ? "active" : ""} aria-pressed={language === "EN"} onClick={() => setLanguage("EN")}>EN</button>
-            </div>
+            <SocialIcons />
           </aside>
         </div>
       )}

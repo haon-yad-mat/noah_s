@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Dawning+of+a+New+Day&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&family=Dawning+of+a+New+Day&family=Space+Grotesk:wght@400;500;600;700&display=swap");
 
 * {
   box-sizing: border-box;
@@ -3325,4 +3325,320 @@ body.main-site-flow-active { overflow: hidden; }
   .start-menu-character img,
   .start-menu-details-reveal,
   .start-menu-option-button { transition-duration: 1ms; }
+}
+
+/* A date with me — both dates share a continuous document scroll. */
+.date-page { color: #fff; font-family: Inter, sans-serif; overflow-x: clip; width: 100%; margin-left: 0; transition: width 220ms ease, margin-left 220ms ease; }
+.date-page button { cursor: pointer; }
+.date-section { position: relative; width: 100%; min-height: 100vh; min-height: 100dvh; overflow: hidden; }
+.date-first { background: #65351c; }
+.date-first-background { position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.date-header { position: absolute; z-index: 3; top: clamp(20px, 4vw, 44px); left: clamp(24px, 5.6vw, 80px); right: clamp(24px, 5vw, 70px); display: flex; justify-content: space-between; align-items: center; }
+.date-breadcrumb { background: none; border: 0; color: white; font-size: 18px; display: flex; gap: 18px; align-items: center; padding: 0; }
+.date-breadcrumb-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
+.date-breadcrumb-icon svg { width: 20px; height: 20px; }
+.date-breadcrumb-icon svg path { stroke: currentColor; }
+.date-breadcrumb span:last-child { font-size: 26px; line-height: 16px; }
+.date-language { display: flex; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,.85); }
+.date-language button { border: 0; color: #141522; padding: 8px 12px; background: transparent; font-size: 14px; }
+.date-language button.active { background: rgba(255,255,255,.8); }
+.date-header-kind { position: absolute; width: 1px; height: 1px; overflow: hidden; }
+.date-quote { position: absolute; top: 24%; left: 5.6%; width: min(350px, 35vw); z-index: 1; }
+.date-quote h1 { margin: 0; font-size: clamp(24px, 2.3vw, 34px); line-height: 1.2; font-weight: 700; }
+.date-quote p { max-width: 260px; margin-top: 36px; line-height: 1.45; font-size: 16px; font-weight: 400; }
+.date-credit { position: absolute; bottom: 18px; left: 5.6%; font-size: 12px; font-style: italic; }
+.date-selector { position: absolute; z-index: 2; right: clamp(24px, 5.5vw, 80px); bottom: 0; width: clamp(190px, 18vw, 248px); padding: 16px 22px 24px; display: grid; gap: 16px; border-radius: 24px 24px 0 0; background: linear-gradient(#ff93a9a6 0 50%, #6acff2a6 50% 100%); backdrop-filter: blur(16px); }
+.date-selector button { position: relative; padding: 0; border: 1px solid white; border-radius: 22px; overflow: hidden; aspect-ratio: 2 / 1.2; background: #172943; box-shadow: 0 4px 12px #0003; }
+.date-selector button:hover, .date-selector button:focus-visible { outline: 2px solid #fff; transform: translateY(-3px); }
+.date-selector-picture, .date-selector-picture img { display: block; width: 100%; height: 100%; }
+.date-selector-picture img { object-fit: cover; }
+.date-selector-name { position: absolute; bottom: 4px; left: 8px; padding: 3px 6px; border-radius: 4px; background: #0009; color: white; font-size: 12px; opacity: 0; }
+.date-selector button:hover .date-selector-name, .date-selector button:focus-visible .date-selector-name { opacity: 1; }
+.date-selector button.active { cursor: default; }
+.date-section:not(.date-first) { display: flex; align-items: center; justify-content: center; }
+.date-section h2 { font-size: clamp(24px, 2.3vw, 34px); line-height: 1.3; }
+.date-section p { line-height: 1.5; }
+/* Coffee part 2: keep the SVG's aspect ratio, extending past its transparent right edge. */
+.coffee-scene { background: linear-gradient(180deg, #ffac55 0%, #ffc387 100%); color: #292220; text-align: center; isolation: isolate; }
+/* The 921 × 165 cream oval sits behind the text. A tighter browser blur matches the visible Figma glow. */
+.coffee-scene::before { content: ""; position: absolute; z-index: 0; left: 50%; top: 55%; width: 921px; max-width: 90vw; height: 165px; transform: translate(-50%, -50%); background: #fff7e4; opacity: .88; filter: blur(120px); pointer-events: none; }
+/* Keep the upper edge at the exact #ffac55 ending of the hero, below the dots. */
+/* Match both seams: #ffac55 above, and the decor SVG's #ffbd7a below. */
+.coffee-scene::after { content: ""; position: absolute; z-index: 0; inset: 0; background: linear-gradient(180deg, #ffac55 0, rgba(255, 172, 85, 0) min(220px, 31dvh)), linear-gradient(0deg, #ffbd7a 0, rgba(255, 189, 122, 0) min(260px, 36dvh)); pointer-events: none; }
+/* The SVG already fades its dots; an extra opacity here washes out the seam. */
+.coffee-scene > img { position: absolute; z-index: 1; top: 0; left: 0; display: block; width: 125%; max-width: none; height: auto; opacity: 1; pointer-events: none; }
+.coffee-scene > div { position: relative; z-index: 2; max-width: 850px; padding: 32px; }
+.coffee-scene em { color: #d41929; text-decoration: underline; }
+/* Part 3 ends at the same dark color where part 4 begins. */
+.coffee-why { background: linear-gradient(180deg, #913220 0%, #2b0f09 100%); padding: 8vw; justify-content: flex-start !important; }
+/* Recreate the reference's clean diagonal. The SVG's pointed right edge introduced a visible notch. */
+.coffee-why::before { content: ""; position: absolute; z-index: 1; inset: 0 0 auto; height: 165px; background: #ffbd7a; clip-path: polygon(0 0, 100% 0, 100% 18.18%, 0 100%); pointer-events: none; }
+.coffee-why > div { max-width: 490px; position: relative; z-index: 1; }
+/* In the 1440 × 720 reference the SVG frame starts 6% down; its transparent pixels put the visible rim at ~105px. */
+.coffee-why-art { position: absolute; height: min(94dvh, 800px); right: -15%; top: 6%; }
+.coffee-why em { font-weight: 600; }
+.coffee-cards { background: linear-gradient(180deg, #2b0f09 0%, #913220 100%); padding: 50px 4vw; }
+.coffee-card-row { position: relative; width: min(1200px, 100%); height: min(620px, 82dvh); min-height: 470px; --coffee-side-offset: min(36vw, 435px); }
+.coffee-card { position: absolute; top: 54%; left: 50%; display: flex; flex-direction: column; width: clamp(225.4px, 22.54vw, 313.6px); height: auto; padding: 23.52px 31.36px 27.44px; border: 0; border-radius: 23.52px; overflow: visible; interpolate-size: allow-keywords; background: #e2d2c2; color: #161313; text-align: left; font: inherit; filter: brightness(.8) saturate(.8); box-shadow: 0 12px 24px #0006; transition: transform 500ms cubic-bezier(.22,1,.36,1), width 500ms, height 500ms, background-color 500ms, filter 500ms, box-shadow 500ms; }
+.coffee-card-left { z-index: 1; transform: translate(-50%, -50%) translateX(calc(-1 * var(--coffee-side-offset))); }
+.coffee-card-right { z-index: 1; transform: translate(-50%, -50%) translateX(var(--coffee-side-offset)); }
+.coffee-card-center { z-index: 2; width: clamp(323.4px, 31.36vw, 411.6px); background: #ffeddb; filter: none; box-shadow: 0 16px 30px #0007; transform: translate(-50%, -50%); }
+.coffee-card:not(.coffee-card-center):hover { filter: brightness(.93) saturate(.95); }
+.coffee-card:focus-visible { outline: 3px solid #ffac55; outline-offset: 5px; }
+.coffee-card-art { display: block; flex: none; width: 100%; height: 166.6px; transition: width 500ms, height 500ms, margin 500ms; }
+.coffee-card-art img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.coffee-card-center .coffee-card-art { width: 110%; height: 252px; margin: -87px 0 10px -5%; }
+/* The coffee shop illustration grows beyond the active card's top and sides. */
+.coffee-card-center.coffee-card-coffee4-table .coffee-card-art { width: 148%; height: 338px; margin: -173px 0 10px -20%; }
+.coffee-card-title { display: block; font-size: 23.52px; line-height: 1.25; font-weight: 500; }
+.coffee-card-center .coffee-card-title { font-size: 30.38px; }
+.coffee-card-details { display: grid; gap: 21.56px; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; font-size: 17.64px; font-weight: 400; line-height: 1.4; transition: max-height 500ms, opacity 250ms, visibility 500ms, margin 500ms; }
+.coffee-card-center .coffee-card-details { max-height: none; margin-top: 22px; opacity: 1; visibility: visible; }
+.coffee-card-details em { color: #ce0018; font-size: 19.6px; font-weight: 500; font-style: italic; }
+.date-contact { gap: 6vw; padding: 6vw; }
+.date-contact > div:first-of-type { max-width: 480px; flex: 1; }
+.coffee-contact { --contact-blob: #fff7e4; background: #ffbd7a; color: #6d3025; isolation: isolate; }
+/* Ellipses and blur follow the 1440 × 502 Figma background. */
+.coffee-contact::before, .coffee-contact::after, .coffee-contact-glow,
+.moon-contact::before, .moon-contact::after, .moon-contact-glow { content: ""; position: absolute; z-index: 0; display: block; border-radius: 50%; background: var(--contact-blob); opacity: .88; filter: blur(120px); pointer-events: none; }
+.coffee-contact::before, .moon-contact::before { width: 46.875vw; height: 23.819vw; left: 47.743%; top: 0; transform: translate(-50%, -50%); }
+.coffee-contact::after, .moon-contact::after { width: 28.403vw; height: 29.097vw; left: 99.688%; top: 70.418%; transform: translate(-50%, -50%); }
+.coffee-contact-glow, .moon-contact-glow { width: 43.264vw; height: 35.278vw; left: .313%; top: 92.032%; transform: translate(-50%, -50%); }
+.coffee-contact > div:first-of-type, .coffee-contact > .date-form,
+.moon-contact > div:first-of-type, .moon-contact > .date-form { position: relative; z-index: 1; }
+.coffee-contact h2 { color: #ce0018; }
+.date-form { flex: 1; max-width: 630px; background: #fff0df; color: #ce0018; border-radius: 12px; padding: 24px; box-shadow: 0 10px 24px #0002; font-size: 13px; }
+.date-form p { margin: 0 0 20px; padding-bottom: 12px; border-bottom: 1px solid #eabcb3; }
+.date-form label { display: grid; gap: 7px; margin-bottom: 16px; }
+.date-form-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.date-form input, .date-form textarea { width: 100%; background: white; color: #2c2c35; border: 1px solid #ddd; border-radius: 6px; padding: 10px 12px; resize: vertical; font: inherit; }
+.date-form-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+.date-form-actions span { margin-right: auto; }
+.date-form-actions button { border: 1px solid #ddd; border-radius: 6px; background: white; padding: 8px 12px; color: #ab1428; }
+.date-form-actions button[type=submit] { background: #ce0018; color: white; border-color: #ce0018; }
+.date-footer { position: relative; height: 120px; min-height: 120px; display: flex; align-items: center; padding: 16px 4vw; background-color: #3a2f47; background-repeat: no-repeat; }
+.date-footer.coffee { background-image: linear-gradient(180deg, rgba(58, 47, 71, .68) 0%, #3a2f47 100%), url('/noah_s/images/date/coffee-foot-back.svg'); background-size: 100% 176px, 127.7778% auto; background-position: center top, right 66%; }
+.date-footer.moonwatch { background-color: #1d2020; background-image: url('/noah_s/images/date/moonwatch-foot-cloud.svg'), linear-gradient(180deg, #234042 0%, #1d2020 100%); background-size: 114.4444vw auto, 100% 100%; background-position: -1.7361vw -2.9167vw, center; }
+.date-footer.moonwatch::after { content: ""; position: absolute; inset: auto 0 0; height: 63px; background: linear-gradient(180deg, rgba(58, 47, 71, 0) 0%, #3a2f47 100%); pointer-events: none; }
+.date-footer-links { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: center; gap: 12px; width: 100%; }
+.date-footer button { border: 0; padding: 8px; background: none; color: white; text-align: center; text-decoration: none; transition: color 180ms ease, transform 180ms ease; }
+.date-footer button:hover, .date-footer button:focus-visible { color: #ffef19; transform: translateY(-2px); text-decoration: none; }
+.date-moon .date-first { background: #142943; }
+.date-moon .date-quote { top: 22%; }
+.date-moon .date-quote p { position: absolute; left: 66vw; top: 10px; width: 260px; margin: 0; }
+.moon-scene { text-align: center; flex-direction: column; isolation: isolate; background: linear-gradient(180deg, #57aab6 0%, #397078 100%); padding: 50px 18px; }
+/* Same oval and browser blur as Coffee date; Figma uses 88% layer opacity and a 64% blue gradient fill. */
+.moon-scene::before { content: ""; position: absolute; z-index: 0; left: 50%; top: 55%; width: 921px; max-width: 90vw; height: 165px; transform: translate(-50%, -50%); background: linear-gradient(90deg, rgba(50, 122, 211, .64) 0%, rgba(26, 63, 109, .64) 100%); opacity: .88; filter: blur(120px); pointer-events: none; }
+.moon-scene-sparkles { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.moon-scene > :not(.moon-scene-sparkles) { position: relative; z-index: 2; }
+.moon-scene h2 { max-width: 830px; }
+.moon-scene em { color: #9df0dc; text-decoration: underline; }
+.moon-reflection { background: linear-gradient(180deg, #397078 0%, #233f46 100%); padding: 7vw; justify-content: flex-start !important; }
+.moon-reflection > div { width: min(540px, 55%); position: relative; z-index: 3; }
+.moon-reflection-moon { position: absolute; z-index: 1; right: -8vw; width: min(46vw, 680px); filter: drop-shadow(0 0 30px #a1b9eb88); }
+.moon-reflection-sparkles { position: absolute; z-index: 0; top: -41.458333vw; left: 38.333333vw; width: 108.263889vw; height: auto; max-width: none; opacity: .5; mix-blend-mode: plus-lighter; pointer-events: none; }
+.moon-carousel-section { background: linear-gradient(180deg, #233f46 0%, #230d0d 100%); display: flex; flex-direction: column; padding: 42px 3vw 24px; }
+.moon-carousel-stars { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: .32; pointer-events: none; }
+.moon-carousel-copy { text-align: center; z-index: 2; max-width: 800px; }
+.moon-carousel-copy h2 { margin: 0 0 16px; font-family: Inter, sans-serif; font-size: 49px; font-weight: 700; line-height: 1.2; }
+.moon-carousel-copy h3 { margin: 0; font-family: Inter, sans-serif; font-size: 24px; font-weight: 700; line-height: 36px; letter-spacing: -.0025em; }
+.moon-carousel-copy p { margin: 0; font-family: Inter, sans-serif; font-size: 18px; font-weight: 400; line-height: 26px; }
+.moon-divider { width: 110px; height: 2px; background: white; margin: 24px auto; }
+.moon-track { position: relative; width: 100vw; max-width: none; height: clamp(310px, 45vh, 440px); flex-shrink: 0; }
+.moon-orbit-item { position: absolute; width: clamp(185px, 30vmin, 280px); height: clamp(185px, 30vmin, 280px); border: 0; border-radius: 50%; background: transparent; padding: 0; filter: drop-shadow(0 0 15px #b8cbe3a0); transform: translate(-50%, -50%); opacity: .48; transition: left .55s ease, top .55s ease, width .55s ease, height .55s ease, opacity .55s ease, transform .2s ease; }
+.moon-orbit-item.is-previous { left: calc(10px + clamp(43px, 6.9vmin, 64px)); top: 31%; }
+.moon-orbit-item.is-next { left: calc(100% - 10px - clamp(43px, 6.9vmin, 64px)); top: 31%; }
+.moon-orbit-item.is-center { left: calc(50% - clamp(6.65px, .903vw, 13px)); top: 66%; width: clamp(360px, 48.89vw, 704px); height: clamp(360px, 48.89vw, 704px); opacity: 1; z-index: 1; }
+.moon-orbit-item img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.moon-orbit-item span { position: absolute; top: 50%; white-space: nowrap; color: white; font-family: Inter, sans-serif; font-size: 13px; font-style: italic; font-weight: 400; transform: translateY(-50%); text-shadow: 0 1px 6px black; }
+.moon-orbit-item.is-previous span { left: 95%; }
+.moon-orbit-item.is-next span { right: 95%; }
+.moon-orbit-item.is-center span { display: none; }
+.moon-orbit-item:focus-visible { outline: 2px solid white; }
+.moon-orbit-item.is-previous:hover, .moon-orbit-item.is-previous:focus-visible { transform: translate(calc(-50% + 2px), calc(-50% - 2px)); }
+.moon-orbit-item.is-next:hover, .moon-orbit-item.is-next:focus-visible { transform: translate(calc(-50% - 2px), calc(-50% - 2px)); }
+.moon-orbit-item.is-center { cursor: default; }
+.moon-contact { --contact-blob: #25494d; background: #1d2020; isolation: isolate; }
+.moon-contact .date-form { background: #bbc1d4; color: #404da0; }
+.moon-contact .date-form p { border-color: #8493c0; }
+.moon-contact .date-form-actions button[type=submit] { background: #4d4fb6; border-color: #4d4fb6; }
+@media(max-width:760px) {
+  .date-first-background { object-position: 60% center; }
+  .date-quote { top: 18%; width: min(310px, 70vw); }
+  .date-quote p { margin-top: 18px; }
+  .date-selector { width: 150px; padding: 10px; gap: 8px; right: 16px; }
+  .date-contact { flex-direction: column; }
+  .date-section:not(.date-first) { padding: 60px 24px; }
+  .coffee-why-art { opacity: .3; }
+  .coffee-card-row { --coffee-side-offset: 52vw; height: 540px; min-height: 0; }
+  .coffee-card { width: min(56.84vw, 274.4px); padding: 17.64px 19.6px; }
+  .coffee-card-center { width: min(73.5vw, 382.2px); }
+  .coffee-card-art { height: 166.6px; }
+  .coffee-card-center .coffee-card-art { height: 223px; margin-top: -63px; }
+  .coffee-card-center.coffee-card-coffee4-table .coffee-card-art { width: 148%; height: 301px; margin: -141px 0 10px -20%; }
+  .coffee-card-title { font-size: clamp(17.64px, 3.724vw, 23.52px); }
+  .coffee-card-center .coffee-card-title { font-size: clamp(23.52px, 5.39vw, 30.38px); }
+  .coffee-card-details { gap: 13.72px; font-size: clamp(14.7px, 3.136vw, 17.64px); }
+  .coffee-card-details em { font-size: clamp(16.66px, 3.43vw, 19.6px); }
+  .coffee-card-center .coffee-card-details { margin-top: 14px; }
+  .coffee-cards, .moon-carousel-section { min-height: 100dvh; height: auto; }
+  .date-contact > div:first-of-type, .moon-reflection > div { width: 100%; }
+  .moon-reflection-moon { opacity: .25; width: 90vw; }
+  .moon-carousel-copy h2 { font-size: clamp(32px, 8vw, 49px); }
+  .moon-carousel-copy h3 { font-size: clamp(18px, 5vw, 24px); line-height: 1.5; }
+  .moon-carousel-copy p { font-size: clamp(15px, 4vw, 18px); line-height: 26px; }
+  .moon-track { height: 310px; }
+  .moon-orbit-item { width: clamp(105px, 26vw, 160px); height: clamp(105px, 26vw, 160px); }
+  .moon-orbit-item.is-previous { left: calc(10px + clamp(24px, 6vw, 37px)); top: 29%; }
+  .moon-orbit-item.is-next { left: calc(100% - 10px - clamp(24px, 6vw, 37px)); top: 29%; }
+  .moon-orbit-item.is-center { left: calc(50% - clamp(4.9px, 1.477vw, 7.8px)); top: 65%; width: clamp(265px, 80vw, 420px); height: clamp(265px, 80vw, 420px); }
+  .moon-orbit-item span { font-size: 11px; }
+  .moon-orbit-item.is-previous span { left: 82%; }
+  .moon-orbit-item.is-next span { right: 82%; }
+  .date-footer { height: auto; }
+  .date-footer-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .date-moon .date-quote p { position: static; width: min(260px, 70vw); margin-top: 18px; }
+}
+@media(prefers-reduced-motion:reduce) { .moon-orbit-item { transition: none; } }
+
+/* The fade and both controls stay together at the top while the date page scrolls. */
+.date-topbar {
+  position: fixed;
+  z-index: 30;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 127px;
+  background: linear-gradient(180deg, #3a2f47 0%, rgba(58, 47, 71, 0) 100%);
+  pointer-events: none;
+  transition: left 220ms ease, width 220ms ease;
+}
+.date-topbar .date-header { pointer-events: auto; }
+.date-page.sidebar-open { width: calc(100% - 288px); margin-left: 288px; }
+.date-page.sidebar-open .date-topbar { left: 288px; width: calc(100% - 288px); }
+.date-page.sidebar-open .date-breadcrumb { display: none; }
+
+/* Match the original hero under a translucent sidebar, without hero text. */
+.date-sidebar-layer {
+  position: fixed;
+  z-index: 40;
+  inset: 0 auto 0 0;
+  width: 288px;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  pointer-events: none;
+}
+.date-sidebar-background {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100vw;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.date-sidebar-layer .date-sidebar {
+  position: relative;
+  z-index: 1;
+  width: 288px;
+  max-width: 288px;
+  height: 100%;
+  background: rgba(243, 238, 255, .48);
+  pointer-events: auto;
+}
+@media (max-width: 600px) {
+  .date-page.sidebar-open { width: 100%; margin-left: 0; }
+  .date-page.sidebar-open .date-topbar { left: 0; width: 100%; }
+  .date-sidebar-layer, .date-sidebar-layer .date-sidebar { width: 100vw; max-width: 100vw; }
+}
+
+.date-coffee .date-header,
+.date-coffee .date-quote,
+.date-coffee .date-credit,
+.date-coffee .date-selector {
+  z-index: 2;
+}
+
+.date-coffee .date-credit {
+  display: inline-flex;
+  align-items: center;
+  width: 112px;
+  height: 16px;
+  background: rgba(128, 70, 12, .36);
+  text-shadow:
+    -1.5px 1.5px 0 #80460c,
+    -1px 1px 0 #80460c;
+}
+
+.date-moon .date-credit {
+  display: inline-flex;
+  align-items: center;
+  width: 94px;
+  height: 21px;
+  background: rgba(31, 74, 128, .48);
+}
+
+/* Each date option owns its colored half, so its inactive state fades as a whole. */
+.date-selector {
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  background: transparent;
+}
+
+.date-selector button {
+  width: 100%;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 24px 24px 16px;
+  background: #ff8f9e;
+  opacity: 0.64;
+  transition: opacity 180ms ease;
+}
+
+.date-selector button:last-child {
+  padding: 16px 24px 24px;
+  background: #89ddf7;
+}
+
+.date-selector button.active {
+  opacity: 1;
+}
+
+.date-selector button:hover,
+.date-selector button:focus-visible {
+  transform: none;
+  outline: none;
+}
+
+.date-selector button:focus-visible .date-selector-picture {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.date-selector-picture {
+  height: auto;
+  aspect-ratio: 50 / 31;
+  border: 1px solid #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px #0003;
+}
+
+@media (max-width: 760px) {
+  .date-selector button {
+    padding: 16px 24px 12px;
+  }
+
+  .date-selector button:last-child {
+    padding: 12px 24px 16px;
+  }
+}
+
+/* Coffee hero supporting copy uses Inter Regular. */
+.date-coffee .date-quote p {
+  font-weight: 400;
 }
