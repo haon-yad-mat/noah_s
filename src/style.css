@@ -3334,8 +3334,6 @@ body.main-site-flow-active { overflow: hidden; }
 .date-first { background: #65351c; }
 .date-first-background { position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .date-header { position: absolute; z-index: 3; top: clamp(20px, 4vw, 44px); left: clamp(24px, 5.6vw, 80px); right: clamp(24px, 5vw, 70px); display: flex; justify-content: space-between; align-items: center; }
-.date-music-toggle { position: absolute; top: clamp(68px, 7vw, 82px); right: clamp(24px, 5vw, 70px); z-index: 4; border: 1px solid rgba(255,255,255,.85); border-radius: 999px; padding: 8px 13px; background: rgba(255,255,255,.76); color: #141522; font: 600 12px/1 Inter, sans-serif; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
-.date-music-toggle:hover, .date-music-toggle:focus-visible { background: #fff; outline: 2px solid rgba(255,255,255,.9); outline-offset: 2px; }
 .date-breadcrumb { background: none; border: 0; color: white; font-size: 18px; display: flex; gap: 18px; align-items: center; padding: 0; }
 .date-breadcrumb-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
 .date-breadcrumb-icon svg { width: 20px; height: 20px; }

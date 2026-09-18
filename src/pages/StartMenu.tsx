@@ -15,6 +15,7 @@ type StartMenuProps = {
   active: boolean;
   onOpenHistory: () => void;
   onOpenDate: () => void;
+
 };
 
 type MenuOption = {
@@ -79,7 +80,13 @@ const armPoses = [
   { handX: -29, handY: 90, handAngle: -30, elbowX: 54, elbowY: 20, elbowAngle: -27, upperAngle: -11, upperStretch: 1.05 },
 ];
 
-export default function StartMenu({ language, setLanguage, active, onOpenHistory, onOpenDate }: StartMenuProps) {
+export default function StartMenu({
+  language,
+  setLanguage,
+  active,
+  onOpenHistory,
+  onOpenDate,
+}: StartMenuProps) {
   const [openId, setOpenId] = useState<string | null>(null);
   const [comingSoonOpen, setComingSoonOpen] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState(0);
@@ -112,6 +119,7 @@ export default function StartMenu({ language, setLanguage, active, onOpenHistory
 
     return () => {
       cancelled = true;
+      audio.pause();
       if (waitingForInteraction) window.removeEventListener("pointerdown", retryPlay);
     };
   }, [active, isPlaying]);
@@ -216,8 +224,13 @@ export default function StartMenu({ language, setLanguage, active, onOpenHistory
                           className="start-menu-go"
                           tabIndex={isOpen ? 0 : -1}
                           aria-label={`Open ${option.label}`}
-                          onClick={option.id === "history" ? onOpenHistory : option.id === "date" ? onOpenDate : () => setComingSoonOpen(true)}
-                        >
+onClick={
+  option.id === "history"
+    ? onOpenHistory
+    : option.id === "date"
+      ? onOpenDate
+      : () => setComingSoonOpen(true)
+}                        >
                           <span className="start-menu-go-icon" aria-hidden="true" />
                         </button>
                       </div>

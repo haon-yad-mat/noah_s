@@ -12,12 +12,8 @@ type Props = {
 };
 
 const root = "/noah_s/images/date/";
-const audioRoot = "/noah_s/audio/";
 const illustration = (name: string) => `${root}${name}.svg`;
-const dateMusic = {
-  coffee: "Lukrembo-Boba Tea.mp3",
-  moonwatch: "Aylex-Creamy.mp3",
-} as const;
+const musicRoot = "/noah_s/audio/";
 const moonPhaseArtwork = [
   "b0-new moon", "b1-waxing crescent", "b2-first quarter", "b3-waxing gibbous",
   "b4-full", "b5-wanning gibbous", "b6-last quarter", "b7-wanning crescent",
@@ -69,10 +65,10 @@ function DateSelector({ kind, onChangeKind }: Pick<Props, "kind" | "onChangeKind
   return (
     <nav className="date-selector" aria-label="Choose a date">
       <button type="button" className={kind === "coffee" ? "active" : ""} aria-current={kind === "coffee" ? "page" : undefined} onClick={() => onChangeKind("coffee")}>
-        <span className="date-selector-picture coffee-picture"><img src={illustration("coffe1-back")} alt="" /></span><span className="date-selector-name">Coffee date</span>
+        <span className="date-selector-picture coffee-picture"><img src={illustration("coffe1-back")} alt="" /></span><span className="date-selector-name">Over Coffee</span>
       </button>
       <button type="button" className={kind === "moonwatch" ? "active" : ""} aria-current={kind === "moonwatch" ? "page" : undefined} onClick={() => onChangeKind("moonwatch")}>
-        <span className="date-selector-picture moon-picture"><img src={illustration("moonwatch1-back")} alt="" /></span><span className="date-selector-name">Moonwatch</span>
+        <span className="date-selector-picture moon-picture"><img src={illustration("moonwatch1-back")} alt="" /></span><span className="date-selector-name">Under the Moon</span>
       </button>
     </nav>
   );
@@ -114,7 +110,7 @@ function DateHeader({ kind, language, setLanguage, onToggleMenu, menuOpen }: Pic
       <button type="button" className={language === "VN" ? "active" : ""} onClick={() => setLanguage("VN")}>VN</button>
       <button type="button" className={language === "EN" ? "active" : ""} onClick={() => setLanguage("EN")}>EN</button>
     </div>
-    <span className="date-header-kind" aria-hidden="true">{kind === "coffee" ? "Coffee date" : "Moonwatch"}</span>
+    <span className="date-header-kind" aria-hidden="true">{kind === "coffee" ? "Over Coffee" : "Under the Moon"}</span>
   </header>;
 }
 
@@ -214,22 +210,20 @@ function DateFooter({ kind, onBackToMenu, onOpenHistory }: Pick<Props, "kind" | 
 export default function DateWithMe(props: Props) {
   const { kind, onChangeKind, language, setLanguage, onBackToMenu, onOpenHistory } = props;
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
-  useEffect(() => {
-    if (!menuOpen) return;
-    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setMenuOpen(false); };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [menuOpen]);
+
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    audio.volume = 0.55;
-    if (!isPlaying) {
-      audio.pause();
-      return;
-    }
+
+    const source = kind === "moonwatch"
+      ? `${musicRoot}Aylex-Creamy.mp3`
+      : `${musicRoot}Lukrembo-Boba Tea.mp3`;
+
+    audio.pause();
+    audio.src = source;
+    audio.load();
+    audio.currentTime = kind === "coffee" ? 3 : 0;
 
     let cancelled = false;
     let waitingForInteraction = false;
@@ -246,19 +240,23 @@ export default function DateWithMe(props: Props) {
 
     return () => {
       cancelled = true;
-      if (waitingForInteraction) window.removeEventListener("pointerdown", retryPlay);
       audio.pause();
+      if (waitingForInteraction) window.removeEventListener("pointerdown", retryPlay);
     };
-  }, [kind, isPlaying]);
+  }, [kind]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setMenuOpen(false); };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
   const moon = kind === "moonwatch";
   return <main className={`date-page ${moon ? "date-moon" : "date-coffee"} ${menuOpen ? "sidebar-open" : ""}`}>
+    <audio ref={audioRef} loop preload="auto" aria-hidden="true" />
     <div className="date-topbar">
       <DateHeader kind={kind} language={language} setLanguage={setLanguage} onToggleMenu={() => setMenuOpen((open) => !open)} menuOpen={menuOpen} />
-      <button type="button" className="date-music-toggle" aria-label={isPlaying ? "Pause music" : "Play music"} aria-pressed={isPlaying} onClick={() => setIsPlaying((playing) => !playing)}>
-        <span aria-hidden="true">{isPlaying ? "Ⅱ" : "▶"}</span> {isPlaying ? "Music on" : "Music off"}
-      </button>
     </div>
-    <audio key={kind} ref={audioRef} src={`${audioRoot}${dateMusic[kind]}`} loop preload="auto" />
     <section className="date-section date-first">
       <img className="date-first-background" src={illustration(moon ? "moonwatch1-back" : "coffe1-back")} alt="" />
       <div className="date-quote"><h1>{moon ? '“Everyone is a moon, and has a dark side which he never shows to anybody.”*' : '“Behind every successful woman is a substantial amount of coffee.”*'}</h1><p>{moon ? "Accepting this as a fact, rather than using it to judge anyone, is my way of respecting people." : "For me, it’ll almost always be a Vietnamese brown coffee with 20% less condensed milk"}</p></div>
