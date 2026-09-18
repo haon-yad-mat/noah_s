@@ -151,48 +151,42 @@ function DateSidebar({ kind, onClose, onOpenHistory }: Pick<Props, "kind" | "onO
 
 function DateForm({ kind }: { kind: DateKind }) {
   const [isSending, setIsSending] = useState(false);
-  const [sent, setSent] = useState(false);
-  const recipientEmail = "luutmtam@gmail.com";
+  const [status, setStatus] = useState<"" | "sending" | "success" | "error">("");
 
-  useEffect(() => {
-    if (!sent) return;
-    const timeout = window.setTimeout(() => setSent(false), 1200);
-    return () => window.clearTimeout(timeout);
-  }, [sent]);
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     if (!form.reportValidity()) return;
 
-    const data = new FormData(form);
-    const name = String(data.get("name") ?? "").trim() || "Someone";
-    const pronouns = String(data.get("pronouns") ?? "").trim();
-    const message = String(data.get("message") ?? "").trim();
-
-    const subject = encodeURIComponent(
-      pronouns ? `${name} (${pronouns}) sent a message` : `${name} sent a message`
-    );
-    const body = encodeURIComponent(
-      `Name: ${name}\nPronouns: ${pronouns || "Not provided"}\n\nMessage:\n${message}`
-    );
-
     setIsSending(true);
-    setSent(true);
-    window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
+    setStatus("sending");
+    try {
+      const response = await fetch("https://formspree.io/f/xqpakvkl", {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+
+      if (!response.ok) throw new Error("Form submission failed");
+      form.reset();
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return <>
-    <form className="date-form" onSubmit={handleSubmit} onChange={() => { setIsSending(false); setSent(false); }}>
+    <form className="date-form" onSubmit={handleSubmit} onChange={() => { if (!isSending) setStatus(""); }}>
       <p>{kind === "coffee" ? "If this were a real coffee date, what would you tell me? Tell me anything you'd love to. A random thought. A funny story. Or simply, just say hi." : "Some thoughts are too small for a diary, yet too precious to disappear. Tell me anything you'd love to. A random thought. A funny story. Or simply, just say hi."}</p>
       <div className="date-form-two">
         <label>Your Name<input name="name" placeholder="Whatever you'd like me to call you" required /></label>
         <label>Your Pronouns<input name="pronouns" placeholder="Just in case..." /></label>
       </div>
       <label>One thing about you<textarea name="message" placeholder={kind === "coffee" ? "Something you'd tell me over coffee." : "One honest thought for the moon to remember"} rows={2} required /></label>
-      <div className="date-form-actions"><span role="status">{isSending ? "Opening your email app..." : ""}</span><button type="reset" onClick={() => { setIsSending(false); setSent(false); }}>Cancel</button><button type="submit">Send</button></div>
+      <div className="date-form-actions"><span role="status" aria-live="polite">{status === "sending" ? "Sending..." : status === "success" ? "Your message has been sent." : status === "error" ? "Something went wrong. Please try again." : ""}</span><button type="reset" onClick={() => { setIsSending(false); setStatus(""); }}>Cancel</button><button type="submit" disabled={isSending}>{isSending ? "Sending..." : "Send"}</button></div>
     </form>
-    {sent && <div className="coming-soon-overlay" onClick={() => setSent(false)}><div className="coming-soon-popup" role="dialog" aria-modal="true" aria-label="Message sent" onClick={(event) => event.stopPropagation()}>Sent</div></div>}
   </>;
 }
 
