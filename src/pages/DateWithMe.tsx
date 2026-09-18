@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { exploreItems, quickStopItems, SocialIcons, InfoIcon } from "./BookofHistory1";
+import { exploreItems, quickStopItems, SocialIcons, SidebarInfo } from "./BookofHistory1";
 
 type DateKind = "coffee" | "moonwatch";
 type Props = {
@@ -136,7 +136,7 @@ function DateSidebar({ kind, onClose, onOpenHistory }: Pick<Props, "kind" | "onO
           if (item.label === "A date with me") onClose();
           else if (item.label === "Book of history") onOpenHistory();
           else setComingSoon(true);
-        }}><span className="book-sidebar-nav-icon">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span>{item.info && <span className="book-sidebar-info" aria-hidden="true"><InfoIcon /></span>}</button>)}
+        }}><span className="book-sidebar-nav-icon">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span>{item.info && <SidebarInfo label={item.label} />}</button>)}
       </div>
       <div className="book-sidebar-section">
         <div className="book-sidebar-section-title">QUICK STOPS</div>

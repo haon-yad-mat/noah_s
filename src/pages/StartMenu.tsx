@@ -31,7 +31,7 @@ const menuOptions: MenuOption[] = [
   {
     id: "wandering",
     label: "Wandering area",
-    sourceLabel: "Wandering idea",
+    sourceLabel: "Wandering area",
     description: <>
       This is where you can see everything: recent updates from me, my readings,
       writings and even more. <strong>Just in case you haven’t got your mind on where to be yet.</strong>

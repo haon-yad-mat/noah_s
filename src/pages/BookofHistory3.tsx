@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { SocialIcons, exploreItems, quickStopItems, InfoIcon } from "./BookofHistory1";
+import { SocialIcons, exploreItems, quickStopItems, SidebarInfo } from "./BookofHistory1";
 
 type Language = "VN" | "EN";
 type Category = "All" | "Academic" | "Career" | "Activities" | "Other";
@@ -239,7 +239,7 @@ export default function BookofHistory3({ language, setLanguage, onOpenResume, on
           <aside className="book-sidebar">
             <div className="book-sidebar-section">
               <div className="book-sidebar-section-title"><span>EXPLORE</span><button type="button" className="book-sidebar-close" onClick={() => setMenuOpen(false)} aria-label="Close navigation menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 7L13 12L18 17M11 7L6 12L11 17" stroke="#44418D" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg></button></div>
-              {exploreItems.map((item) => <button key={item.label} className={`book-sidebar-nav-row ${item.label === "Book of history" ? "active" : ""}`} type="button" onClick={() => handleNavigation(item.label)}><span className="book-sidebar-nav-icon">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span>{item.info && <span className="book-sidebar-info" aria-hidden="true"><InfoIcon /></span>}</button>)}
+              {exploreItems.map((item) => <button key={item.label} className={`book-sidebar-nav-row ${item.label === "Book of history" ? "active" : ""}`} type="button" onClick={() => handleNavigation(item.label)}><span className="book-sidebar-nav-icon">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span>{item.info && <SidebarInfo label={item.label} />}</button>)}
             </div>
             <div className="book-sidebar-section">
               <div className="book-sidebar-section-title">QUICK STOPS</div>

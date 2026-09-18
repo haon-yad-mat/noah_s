@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { SocialIcons, exploreItems, quickStopItems, InfoIcon } from "./BookofHistory1";
+import { SocialIcons, exploreItems, quickStopItems, SidebarInfo } from "./BookofHistory1";
 
 const resumeImage = (name: string) => `/noah_s/images/${name}.svg`;
+const detailedCvMailto = "mailto:luutmtam@gmail.com?subject=%5BFROMWEB%5D%20CV%20Requirement%20Letter&body=Is%20there%20any%20information%20I%20should%20know%20about%20you%3F%0A%0AWhy%20do%20you%20want%20to%20have%20my%20detailed%20CV%3F%0A%0AWhat%27s%20the%20position%20you%20are%20looking%20for%20from%20this%20CV%3F%0A%0A";
 
 type Language = "VN" | "EN";
 
@@ -173,7 +174,7 @@ export default function Resume({
 
           <div className="resume-actions">
             <a href="#portfolio"><img src={resumeImage("arrow-up-right")} width={20} height={20} alt="" /> <span>{language === "VN" ? "Xem Portfolio" : "Check My Portfolio"}</span></a>
-            <a href="mailto:luutmtam@gmail.com"><img src={resumeImage("arrow-up-right")} width={20} height={20} alt="" /> <span>{language === "VN" ? "Liên hệ để nhận CV chi tiết" : "Contact for more detailed CV"}</span></a>
+            <a href={detailedCvMailto}><img src={resumeImage("arrow-up-right")} width={20} height={20} alt="" /> <span>{language === "VN" ? "Liên hệ để nhận CV chi tiết" : "Contact for more detailed CV"}</span></a>
           </div>
         </main>
       </div>
@@ -189,7 +190,7 @@ export default function Resume({
                 </button>
               </div>
               {exploreItems.map((item) => (
-                <button key={item.label} className="book-sidebar-nav-row" type="button" onClick={() => handleNavigation(item.label)}><span className="book-sidebar-nav-icon" aria-hidden="true">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span>{item.info && <span className="book-sidebar-info" aria-hidden="true"><InfoIcon /></span>}</button>
+                <button key={item.label} className="book-sidebar-nav-row" type="button" onClick={() => handleNavigation(item.label)}><span className="book-sidebar-nav-icon" aria-hidden="true">{item.icon}</span><span className="book-sidebar-nav-label">{item.label}</span>{item.info && <SidebarInfo label={item.label} />}</button>
               ))}
             </div>
             <div className="book-sidebar-section">

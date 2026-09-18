@@ -1011,6 +1011,11 @@ button {
   height: 20px;
 }
 
+.book-sidebar-nav-icon svg path,
+.book-sidebar-info svg * {
+  stroke: currentColor;
+}
+
 .book-sidebar-nav-label {
   flex: 1;
 }
@@ -1807,7 +1812,7 @@ body.page3-transition-active {
   height: 21px;
   align-items: center;
   justify-content: center;
-  color: #44418D;
+  color: inherit;
   font-size: 22px;
   line-height: 1;
 }
@@ -2359,6 +2364,10 @@ body.page3-transition-active {
   border-radius: 50%;
   background: #F3EEFF;
   color: #09090B;
+
+.book-menu-button svg path {
+  stroke: currentColor;
+}
   font-size: 16px;
   transition:
     left 0.32s cubic-bezier(0.22, 1, 0.36, 1),
@@ -2421,6 +2430,7 @@ body.page3-transition-active {
 .history-3-card-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 16px;
 }
 
