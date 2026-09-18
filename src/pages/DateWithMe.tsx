@@ -150,26 +150,50 @@ function DateSidebar({ kind, onClose, onOpenHistory }: Pick<Props, "kind" | "onO
 }
 
 function DateForm({ kind }: { kind: DateKind }) {
-  const [saved, setSaved] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const recipientEmail = "luutmtam@gmail.com";
+
+  useEffect(() => {
+    if (!sent) return;
+    const timeout = window.setTimeout(() => setSent(false), 1200);
+    return () => window.clearTimeout(timeout);
+  }, [sent]);
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     if (!form.reportValidity()) return;
+
     const data = new FormData(form);
-    window.localStorage.setItem(`noah-date-draft-${kind}`, JSON.stringify({
-      name: data.get("name"), pronouns: data.get("pronouns"), message: data.get("message"), savedAt: new Date().toISOString(),
-    }));
-    setSaved(true);
+    const name = String(data.get("name") ?? "").trim() || "Someone";
+    const pronouns = String(data.get("pronouns") ?? "").trim();
+    const message = String(data.get("message") ?? "").trim();
+
+    const subject = encodeURIComponent(
+      pronouns ? `${name} (${pronouns}) sent a message` : `${name} sent a message`
+    );
+    const body = encodeURIComponent(
+      `Name: ${name}\nPronouns: ${pronouns || "Not provided"}\n\nMessage:\n${message}`
+    );
+
+    setIsSending(true);
+    setSent(true);
+    window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
   };
-  return <form className="date-form" onSubmit={handleSubmit} onChange={() => setSaved(false)}>
-    <p>{kind === "coffee" ? "If this were a real coffee date, what would you tell me? Tell me anything you'd love to. A random thought. A funny story. Or simply, just say hi." : "Some thoughts are too small for a diary, yet too precious to disappear. Tell me anything you'd love to. A random thought. A funny story. Or simply, just say hi."}</p>
-    <div className="date-form-two">
-      <label>Your Name<input name="name" placeholder="Whatever you'd like me to call you" required /></label>
-      <label>Your Pronouns<input name="pronouns" placeholder="Just in case..." /></label>
-    </div>
-    <label>One thing about you<textarea name="message" placeholder={kind === "coffee" ? "Something you'd tell me over coffee." : "One honest thought for the moon to remember"} rows={2} required /></label>
-    <div className="date-form-actions"><span role="status">{saved ? "Draft saved on this device." : ""}</span><button type="reset" onClick={() => setSaved(false)}>Cancel</button><button type="submit">Save draft</button></div>
-  </form>;
+
+  return <>
+    <form className="date-form" onSubmit={handleSubmit} onChange={() => { setIsSending(false); setSent(false); }}>
+      <p>{kind === "coffee" ? "If this were a real coffee date, what would you tell me? Tell me anything you'd love to. A random thought. A funny story. Or simply, just say hi." : "Some thoughts are too small for a diary, yet too precious to disappear. Tell me anything you'd love to. A random thought. A funny story. Or simply, just say hi."}</p>
+      <div className="date-form-two">
+        <label>Your Name<input name="name" placeholder="Whatever you'd like me to call you" required /></label>
+        <label>Your Pronouns<input name="pronouns" placeholder="Just in case..." /></label>
+      </div>
+      <label>One thing about you<textarea name="message" placeholder={kind === "coffee" ? "Something you'd tell me over coffee." : "One honest thought for the moon to remember"} rows={2} required /></label>
+      <div className="date-form-actions"><span role="status">{isSending ? "Opening your email app..." : ""}</span><button type="reset" onClick={() => { setIsSending(false); setSent(false); }}>Cancel</button><button type="submit">Send</button></div>
+    </form>
+    {sent && <div className="coming-soon-overlay" onClick={() => setSent(false)}><div className="coming-soon-popup" role="dialog" aria-modal="true" aria-label="Message sent" onClick={(event) => event.stopPropagation()}>Sent</div></div>}
+  </>;
 }
 
 function PhaseCarousel() {
