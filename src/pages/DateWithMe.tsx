@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { exploreItems, quickStopItems, SocialIcons, InfoIcon } from "./BookofHistory1";
 
 type DateKind = "coffee" | "moonwatch";
@@ -12,7 +12,12 @@ type Props = {
 };
 
 const root = "/noah_s/images/date/";
+const audioRoot = "/noah_s/audio/";
 const illustration = (name: string) => `${root}${name}.svg`;
+const dateMusic = {
+  coffee: "Lukrembo-Boba Tea.mp3",
+  moonwatch: "Aylex-Creamy.mp3",
+} as const;
 const moonPhaseArtwork = [
   "b0-new moon", "b1-waxing crescent", "b2-first quarter", "b3-waxing gibbous",
   "b4-full", "b5-wanning gibbous", "b6-last quarter", "b7-wanning crescent",
@@ -209,17 +214,51 @@ function DateFooter({ kind, onBackToMenu, onOpenHistory }: Pick<Props, "kind" | 
 export default function DateWithMe(props: Props) {
   const { kind, onChangeKind, language, setLanguage, onBackToMenu, onOpenHistory } = props;
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const audioRef = useRef<HTMLAudioElement>(null);
   useEffect(() => {
     if (!menuOpen) return;
     const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setMenuOpen(false); };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [menuOpen]);
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = 0.55;
+    if (!isPlaying) {
+      audio.pause();
+      return;
+    }
+
+    let cancelled = false;
+    let waitingForInteraction = false;
+    const retryPlay = () => {
+      if (!cancelled) void audio.play().catch(() => undefined);
+    };
+
+    void audio.play().catch(() => {
+      if (!cancelled) {
+        waitingForInteraction = true;
+        window.addEventListener("pointerdown", retryPlay, { once: true });
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      if (waitingForInteraction) window.removeEventListener("pointerdown", retryPlay);
+      audio.pause();
+    };
+  }, [kind, isPlaying]);
   const moon = kind === "moonwatch";
   return <main className={`date-page ${moon ? "date-moon" : "date-coffee"} ${menuOpen ? "sidebar-open" : ""}`}>
     <div className="date-topbar">
       <DateHeader kind={kind} language={language} setLanguage={setLanguage} onToggleMenu={() => setMenuOpen((open) => !open)} menuOpen={menuOpen} />
+      <button type="button" className="date-music-toggle" aria-label={isPlaying ? "Pause music" : "Play music"} aria-pressed={isPlaying} onClick={() => setIsPlaying((playing) => !playing)}>
+        <span aria-hidden="true">{isPlaying ? "Ⅱ" : "▶"}</span> {isPlaying ? "Music on" : "Music off"}
+      </button>
     </div>
+    <audio key={kind} ref={audioRef} src={`${audioRoot}${dateMusic[kind]}`} loop preload="auto" />
     <section className="date-section date-first">
       <img className="date-first-background" src={illustration(moon ? "moonwatch1-back" : "coffe1-back")} alt="" />
       <div className="date-quote"><h1>{moon ? '“Everyone is a moon, and has a dark side which he never shows to anybody.”*' : '“Behind every successful woman is a substantial amount of coffee.”*'}</h1><p>{moon ? "Accepting this as a fact, rather than using it to judge anyone, is my way of respecting people." : "For me, it’ll almost always be a Vietnamese brown coffee with 20% less condensed milk"}</p></div>
