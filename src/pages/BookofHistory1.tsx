@@ -34,10 +34,10 @@ export const InfoIcon = () => (
 export const SidebarInfo = ({ label }: { label: string }) => {
   const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
   const text = label === "A date with me"
-    ? "Lorem ipsum 1"
+    ? "Catching some information about me"
     : label === "Book of history"
-      ? "Lorem ipsum 2"
-      : "Lorem ipsum 3";
+      ? "My Portfolio"
+      : "Come here to loot ideas from me";
 
   return (
     <>
@@ -660,10 +660,10 @@ export default function BookofHistory1({
             onMouseEnter={(event) => {
               const tooltipText =
                 item.label === "A date with me"
-                  ? "Lorem ipsum 1"
+                  ? "Catching some information about me"
                   : item.label === "Book of history"
-                  ? "Lorem ipsum 2"
-                  : "Lorem ipsum 3";
+                  ? "My Portfolio"
+                  : "Come here to loot ideas from me";
 
               setInfoTooltip({
                 text: tooltipText,
