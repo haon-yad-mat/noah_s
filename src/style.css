@@ -3407,15 +3407,15 @@ body.main-site-flow-active { overflow: hidden; }
 .coffee-contact > div:first-of-type, .coffee-contact > .date-form,
 .moon-contact > div:first-of-type, .moon-contact > .date-form { position: relative; z-index: 1; }
 .coffee-contact h2 { color: #ce0018; }
-.date-form { flex: 1; max-width: 630px; background: #fff0df; color: #ce0018; border-radius: 12px; padding: 24px; box-shadow: 0 10px 24px #0002; font-size: 13px; }
+.date-form { --send-fill: #ce0018; flex: 1; max-width: 630px; background: #fff0df; color: #ce0018; border-radius: 12px; padding: 24px; box-shadow: 0 10px 24px #0002; font-size: 13px; }
 .date-form p { margin: 0 0 20px; padding-bottom: 12px; border-bottom: 1px solid #eabcb3; }
 .date-form label { display: grid; gap: 7px; margin-bottom: 16px; }
 .date-form-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .date-form input, .date-form textarea { width: 100%; background: white; color: #2c2c35; border: 1px solid #ddd; border-radius: 6px; padding: 10px 12px; resize: vertical; font: inherit; }
 .date-form-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
 .date-form-actions span { margin-right: auto; }
-.date-form-actions button { border: 1px solid #ddd; border-radius: 6px; background: white; padding: 8px 12px; color: #ab1428; }
-.date-form-actions button[type=submit] { background: #ce0018; color: white; border-color: #ce0018; }
+.date-form-actions button { border: 1px solid #ddd; border-radius: 6px; background: white; padding: 8px 12px; color: var(--send-fill); }
+.date-form-actions button[type=submit] { background: var(--send-fill); color: white; border-color: var(--send-fill); }
 .date-footer { position: relative; height: 120px; min-height: 120px; display: flex; align-items: center; padding: 16px 4vw; background-color: #3a2f47; background-repeat: no-repeat; }
 .date-footer.coffee { background-image: linear-gradient(180deg, rgba(58, 47, 71, .68) 0%, #3a2f47 100%), url('/noah_s/images/date/coffee-foot-back.svg'); background-size: 100% 176px, 127.7778% auto; background-position: center top, right 66%; }
 .date-footer.moonwatch { background-color: #1d2020; background-image: url('/noah_s/images/date/moonwatch-foot-cloud.svg'), linear-gradient(180deg, #234042 0%, #1d2020 100%); background-size: 114.4444vw auto, 100% 100%; background-position: -1.7361vw -2.9167vw, center; }
@@ -3459,9 +3459,9 @@ body.main-site-flow-active { overflow: hidden; }
 .moon-orbit-item.is-next:hover, .moon-orbit-item.is-next:focus-visible { transform: translate(calc(-50% - 2px), calc(-50% - 2px)); }
 .moon-orbit-item.is-center { cursor: default; }
 .moon-contact { --contact-blob: #25494d; background: #1d2020; isolation: isolate; }
-.moon-contact .date-form { background: #bbc1d4; color: #404da0; }
+.moon-contact .date-form { --send-fill: #4d4fb6; background: #bbc1d4; color: #404da0; }
 .moon-contact .date-form p { border-color: #8493c0; }
-.moon-contact .date-form-actions button[type=submit] { background: #4d4fb6; border-color: #4d4fb6; }
+.moon-contact .date-form-actions button[type=submit] { background: var(--send-fill); border-color: var(--send-fill); }
 @media(max-width:760px) {
   .date-first-background { object-position: 60% center; }
   .date-quote { top: 18%; width: min(310px, 70vw); }
